@@ -136,7 +136,7 @@
       box-shadow: 0 0 0 3px rgba(51, 104, 198, .12);
     }
 
-    .tool-button, .copy-button, .add-button {
+    .tool-button, .copy-button, .add-button, .module-delete-button {
       border: 1px solid var(--line);
       border-radius: 11px;
       color: var(--navy);
@@ -149,7 +149,7 @@
       white-space: nowrap;
     }
 
-    .tool-button:hover, .copy-button:hover, .add-button:hover {
+    .tool-button:hover, .copy-button:hover, .add-button:hover, .module-delete-button:hover {
       border-color: #a9c1eb;
       background: var(--blue-soft);
       transform: translateY(-1px);
@@ -360,6 +360,21 @@
       padding: 2px 2px 12px;
       margin-bottom: 14px;
       border-bottom: 1px solid #dfe7f1;
+    }
+
+    .module-delete-button {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border-color: #efcaca;
+      color: #b14c4c;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .module-delete-button:hover {
+      border-color: #d99292;
+      color: #923838;
+      background: #fff5f5;
     }
 
     .module-title-grid {
@@ -683,6 +698,8 @@
       .module-fields { grid-template-columns: 1fr; }
       .field-card.compact-field .field-input { max-width: 100%; }
       .experience-module { padding: 12px; }
+      .module-head { flex-direction: column; }
+      .module-delete-button { align-self: flex-end; }
       .module-title-grid { grid-template-columns: 1fr; }
       .module-title-input { font-size: 17px; }
       .section { padding: 16px; }
@@ -773,7 +790,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    const STORAGE_KEY = "resume-job-helper-v3";
+    const STORAGE_KEY = "resume-job-helper-v4";
 
     const initialSections = [
       {
@@ -1036,11 +1053,14 @@
         title: "技能与个人优势",
         note: "可以按岗位要求删减或重排",
         fields: [
-          { id: "skills-tech", label: "技术技能", value: "Python｜PyTorch｜数据处理｜深度学习｜统计推断｜实验设计｜paired bootstrap｜Wilcoxon tests｜数据划分敏感性分析", type: "技能" },
-          { id: "skills-domain", label: "医疗健康领域", value: "医学检验｜临床实验室流程｜CAR-T 生产与检测｜生物制药｜MHC-II / CD4+ T 细胞表位预测｜患者旅程与医疗 AI", type: "技能" },
-          { id: "skills-software", label: "软件技能", value: "OneNote｜Pages｜Keynote｜Numbers｜Adobe Photoshop｜Adobe Audition｜Adobe Lightroom｜Adobe Premiere｜Final Cut Pro｜Affinity Photo｜Procreate｜Procreate Dreams｜Zotero", type: "技能", wide: true },
-          { id: "skills-language", label: "语言能力", value: "IELTS 6.5｜CET-6 593｜日语约 N3", type: "技能" },
-          { id: "skills-hobbies", label: "兴趣爱好", value: "绘画｜动画制作｜唱歌｜音频编辑｜视频制作｜摄影", type: "技能" },
+          { id: "skills-tech", label: "技术技能", value: "Python｜C｜PyTorch｜SPSS｜Numbers｜数据分析｜深度学习", type: "技能" },
+          { id: "skills-domain", label: "医疗健康领域", value: "医学检验｜临床实验室流程｜CAR-T 细胞生产与检测｜实验室信息化与安全管理｜MHC-II / CD4+ T 细胞表位预测", type: "技能" },
+          { id: "skills-software", label: "软件技能", value: "Microsoft Office｜Adobe Photoshop｜Adobe Audition｜Adobe Lightroom｜Adobe Premiere｜Final Cut Pro｜Affinity Photo｜Procreate｜Procreate Dreams｜Zotero", type: "技能", wide: true },
+          { id: "skills-language", label: "语言能力", value: "IELTS 6.5｜CET-6 593｜LAJ 4（约日语 N3 水平）", type: "技能" },
+          { id: "skills-programming", label: "编程语言", value: "Python，C", type: "技能" },
+          { id: "skills-ai-tools", label: "人工智能工具", value: "使用 Cursor 等 AI 工具辅助项目框架整理，并按各任务目标进行目标驱动的 Vibe coding", type: "技能", wide: true },
+          { id: "skills-training", label: "培训证书", value: "2023 年度上海儿童医学中心药物和医疗器械临床试验质量管理培训（GCP 培训）", type: "技能", wide: true },
+          { id: "skills-hobbies", label: "兴趣爱好", value: "绘画｜动画制作｜歌唱｜音频编辑｜视频制作｜摄影", type: "技能" },
           { id: "strengths-cn", label: "个人优势（中文）", value: "我能够连接临床流程、生物制药生产、生物医学分析和清晰的利益相关方沟通。我的优势包括医疗健康领域理解、分析严谨性、结构化拆解复杂问题、流程与质量意识，以及关注患者和实际落地。", type: "自我评价", wide: true },
           { id: "strengths-en", label: "Personal strengths (English)", value: "A healthcare-trained, data-oriented problem solver who can bridge clinical workflows, biomanufacturing, biomedical analytics and clear stakeholder communication. Strong in analytical rigor, structured problem solving, process quality and translating technical work into real-world action.", type: "自我评价", wide: true },
           { id: "leadership", label: "组织与领导经历", value: "在上海交通大学医学院团委组织部宣传中心从干事成长为主任，负责公众号运营和宣传中心日常工作，包括任务分配、优先级管理、质量审核和成员协调。", type: "其他经历", wide: true }
@@ -1143,7 +1163,6 @@
           { id: "intro-cn", label: "自我介绍（中文，约 90 秒）", value: "您好，我叫董亦哲。本科就读于上海交通大学医学院医学检验技术专业，目前在新加坡国立大学攻读生物医学信息学硕士，预计 2026 年 12 月毕业。我的经历主要围绕医疗健康、实验流程和数据分析展开：我有临床检验和 CAR-T 生产检测经历，也独立复现过 MHC-II/CD4 表位预测深度学习框架，并参与了将风险分层、患者教育和医院平台连接起来的 LungWise 项目。我希望把临床场景理解、数据分析和实际落地能力用于解决医疗健康客户的问题。", type: "自我介绍", wide: true },
           { id: "intro-en", label: "Self-introduction (English)", value: "Hello, my name is Yizhe Dong. I studied Medical Laboratory Science at Shanghai Jiao Tong University School of Medicine and am currently pursuing an MSc in Biomedical Informatics at the National University of Singapore, with expected graduation in December 2026. My experience sits at the intersection of healthcare, laboratory operations and data analytics, spanning clinical laboratory work, CAR-T manufacturing and deep-learning research. I hope to bring together clinical understanding, analytical rigor and stakeholder communication to solve healthcare and life-sciences problems.", type: "自我介绍", wide: true },
           { id: "why-consulting", label: "Why consulting?（English）", value: "I want to expand from solving problems within an individual experiment or production workflow to solving broader problems that affect patients, healthcare organizations and life-sciences companies. Consulting appeals to me because it combines industry understanding, evidence-based analysis, structured problem solving and implementation. My healthcare background and analytical training give me a strong foundation, while consulting would help me further develop commercial judgment and client communication.", type: "申请回答", wide: true },
-          { id: "why-zs", label: "Why ZS?（English）", value: "I am interested in ZS because it combines deep healthcare and life-sciences expertise with data, AI, strategy and technology implementation. The “zero distance to the patient” idea resonates with me: it is not enough to identify a breakdown in the patient journey; we need to design how data, AI and coordination can help patients move to the next step. My experience spans clinical workflows, laboratory quality, computational analysis and healthcare solution design.", type: "申请回答", wide: true },
           { id: "ai-tools", label: "How do you use AI tools?（English）", value: "I use AI tools as productivity aids, not as substitutes for judgment. I define the problem myself, review the logic, validate outputs, read relevant literature and keep the process reviewable. In healthcare projects, I pay particular attention to privacy, model boundaries, interpretability and human review. AI can shorten the path from an idea to a prototype, but responsibility, validation and final judgment must remain with people.", type: "申请回答", wide: true }
         ]
       }
@@ -1177,7 +1196,249 @@
           field.placeholder = field.placeholder || "待填写";
         });
       });
+      applyLatestResumeData(sections);
       return sections;
+    }
+
+    function applyLatestResumeData(sections) {
+      const findSection = id => sections.find(section => section.id === id);
+      const findModule = (sectionId, moduleId) => (findSection(sectionId)?.modules || []).find(module => module.id === moduleId);
+      const setField = (sectionId, fieldId, value) => {
+        const section = findSection(sectionId);
+        const field = [
+          ...(section?.fields || []),
+          ...(section?.modules || []).flatMap(module => module.fields || [])
+        ].find(item => item.id === fieldId);
+        if (field) field.value = value;
+      };
+      const setTitle = (sectionId, moduleId, titleCn, titleEn) => {
+        const module = findModule(sectionId, moduleId);
+        if (!module) return;
+        module.titleCn = titleCn;
+        module.titleEn = titleEn;
+      };
+      const setFields = (sectionId, values) => Object.entries(values).forEach(([id, value]) => setField(sectionId, id, value));
+
+      setFields("personal", {
+        "name-cn": "董亦哲",
+        "name-en": "Dong Yizhe",
+        dob: "2001 年 5 月 24 日",
+        gender: "女",
+        phone: "(+65) 80385946",
+        "backup-phone": "(+86) 13701854112",
+        email: "abby.dyz@qq.com",
+        location: "Singapore / 新加坡",
+        "target-role": ""
+      });
+
+      setTitle("education", "nus-education", "新加坡国立大学", "National University of Singapore");
+      setFields("education", {
+        "edu-nus-school": "新加坡国立大学",
+        "edu-nus-college": "杨潞龄医学院",
+        "edu-nus-major": "生物医学信息学理学硕士",
+        "edu-nus-start": "2025 年 8 月",
+        "edu-nus-end": "2026 年 12 月（预期毕业）",
+        "edu-nus-gpa": "3.63 / 5.0",
+        "edu-nus-courses": "生物医学信息学；医学数据与数据处理；软件开发（Python）；数据结构与算法；人工智能；数据分析基础",
+        "edu-nus-school-en": "National University of Singapore",
+        "edu-nus-college-en": "Yong Loo Lin School of Medicine",
+        "edu-nus-major-en": "Master of Science in Biomedical Informatics",
+        "edu-nus-start-en": "Aug 2025",
+        "edu-nus-end-en": "Dec 2026 (Expected Graduation)",
+        "edu-nus-gpa-en": "3.63 / 5.0",
+        "edu-nus-courses-en": "Biomedical Informatics; Medical Data and Data Processing; Software Development (Python); Data Structures and Algorithms; Artificial Intelligence; Fundamentals of Data Analytics"
+      });
+      setTitle("education", "sjtu-education", "上海交通大学", "Shanghai Jiao Tong University");
+      setFields("education", {
+        "edu-sjtu-school": "上海交通大学",
+        "edu-sjtu-college": "医学院",
+        "edu-sjtu-major": "医学检验技术理学学士",
+        "edu-sjtu-start": "2019 年 9 月",
+        "edu-sjtu-end": "2023 年 6 月",
+        "edu-sjtu-gpa": "3.44 / 4.3",
+        "edu-sjtu-courses": "卫生统计学；临床免疫学；分子生物学；程序设计基础（C）；临床生物化学；实验室管理",
+        "edu-sjtu-school-en": "Shanghai Jiao Tong University",
+        "edu-sjtu-college-en": "School of Medicine",
+        "edu-sjtu-major-en": "Bachelor of Science in Medical Laboratory Science",
+        "edu-sjtu-start-en": "Sep 2019",
+        "edu-sjtu-end-en": "Jun 2023",
+        "edu-sjtu-gpa-en": "3.44 / 4.3",
+        "edu-sjtu-courses-en": "Health Statistics; Clinical Immunology; Molecular Biology; Programming Fundamentals (C); Clinical Biochemistry; Laboratory Management"
+      });
+
+      setTitle("experience", "spbio", "上海医药集团生物治疗技术有限公司", "Shanghai Pharmaceuticals Holding Bio-therapeutics Limited");
+      setFields("experience", {
+        "spbio-company-cn": "上海医药集团生物治疗技术有限公司",
+        "spbio-position-cn": "CMC 细胞 · 生产部",
+        "spbio-start-cn": "2023 年 7 月",
+        "spbio-end-cn": "2025 年 4 月",
+        "spbio-duty-cn": "参与 CAR-T 细胞生产与检测，包括 T 细胞分离培养、转染及效率检测；承担实验室信息化管理、实验室安全（信息、生物等）及其他相关工作。",
+        "spbio-company-en": "Shanghai Pharmaceuticals Holding Bio-therapeutics Limited",
+        "spbio-position-en": "CMC Cell · Production Department",
+        "spbio-start-en": "Jul 2023",
+        "spbio-end-en": "Apr 2025",
+        "spbio-duty-en": "Participated in CAR-T cell production and testing, including T-cell isolation and culture, transfection, and efficiency assessment. Carried out laboratory information management, laboratory safety (information, biological, etc.), and other related responsibilities."
+      });
+      setTitle("experience", "sgh", "上海市第一人民医院", "Shanghai General Hospital");
+      setFields("experience", {
+        "sgh-company-cn": "上海市第一人民医院",
+        "sgh-position-cn": "检验科实习生",
+        "sgh-start-cn": "2022 年 7 月",
+        "sgh-end-cn": "2022 年 12 月",
+        "sgh-duty-cn": "参与生化、免疫、质谱、流式、分子诊断、门急诊、血液、输血等多科室临床检验工作；为患者采血并解读报告，通过自动化仪器或手工操作处理检验样本，参与仪器日常维护及实验室管理。",
+        "sgh-company-en": "Shanghai General Hospital",
+        "sgh-position-en": "Intern of Laboratory Department",
+        "sgh-start-en": "Jul 2022",
+        "sgh-end-en": "Dec 2022",
+        "sgh-duty-en": "Participated in clinical laboratory work across biochemistry, immunology, mass spectrometry, flow cytometry, molecular diagnostics, outpatient and emergency, hematology, and transfusion. Collected blood samples and interpreted reports; processed test samples via automated instruments or manual procedures; participated in routine instrument maintenance and laboratory management."
+      });
+      setTitle("experience", "ruijin", "上海交通大学医学院附属瑞金医院", "Ruijin Hospital, Shanghai Jiao Tong University School of Medicine");
+      setFields("experience", {
+        "ruijin-company-cn": "上海交通大学医学院附属瑞金医院",
+        "ruijin-position-cn": "党委宣传处挂职锻炼",
+        "ruijin-start-cn": "2021 年 8 月",
+        "ruijin-end-cn": "2021 年 8 月",
+        "ruijin-duty-cn": "为医院官方公众号设计图文海报、科普漫画及插画素材；制作科普推文、整理文案，开展文化学习与政治宣传工作。",
+        "ruijin-company-en": "Ruijin Hospital, Shanghai Jiao Tong University School of Medicine",
+        "ruijin-position-en": "Staff of Party Committee's Propaganda Office (Temporary Workouts)",
+        "ruijin-start-en": "Aug 2021",
+        "ruijin-end-en": "Aug 2021",
+        "ruijin-duty-en": "Designed graphic posters, science-popularization comics, and illustration assets for the hospital's official WeChat account. Produced science-popularization posts, organized texts, and carried out cultural learning and political advocacy work."
+      });
+
+      const projects = findSection("projects");
+      if (projects) {
+        const projectOrder = ["lungwise", "immuscope", "allergen-analysis", "uveal-melanoma", "official-media", "aml-msc"];
+        const projectMap = new Map(projects.modules.filter(module => module.id !== "traffic-diversion").map(module => [module.id, module]));
+        projects.modules = projectOrder.map(id => projectMap.get(id)).filter(Boolean);
+      }
+      setTitle("projects", "lungwise", "LungWise——从新加坡起步的肺癌早筛", "LungWise - Earlier Lung-Cancer Detection Starting in Singapore");
+      setFields("projects", {
+        "lungwise-start-cn": "2026 年 7 月",
+        "lungwise-end-cn": "2026 年 8 月",
+        "lungwise-nature-cn": "入围阿斯利康 Project iDEA 2026 新加坡全国总决赛",
+        "lungwise-duty-cn": "针对医院体检场景提出肺癌早筛方案：风险分层 + 定向健康教育 + 依托医院平台落地，将“优先关注谁、沟通什么、在何处就诊”串联起来；主张以分类风险模型识别较高风险个体以辅助分诊，同时将模型与国家筛查纳入标准分开，使其服务于人群管理而非替代临床标准；使用 Cursor 辅助开发，在明确的临床安全约束下，将领域需求转化为可审阅、可运行的研究原型。",
+        "lungwise-start-en": "Jul 2026",
+        "lungwise-end-en": "Aug 2026",
+        "lungwise-nature-en": "Shortlisted to AstraZeneca Project iDEA 2026 Singapore national final",
+        "lungwise-duty-en": "Proposed a lung-cancer early-detection concept for hospital check-up settings: risk stratification, targeted health education, and delivery on the hospital platform, linking who to prioritize, what to communicate, and where care happens. Advocated a classification risk model to identify higher-risk individuals for triage while keeping it separate from national screening eligibility. Practiced Cursor to assist development and turn domain requirements into a reviewable, runnable research prototype under explicit clinical safety constraints."
+      });
+      setTitle("projects", "immuscope", "ImmuScope复现与实验探索", "Reproduction and Experimental Exploration on ImmuScope");
+      setFields("projects", {
+        "immuscope-title-cn": "ImmuScope复现与实验探索",
+        "immuscope-nature-cn": "生物医学信息学硕士毕业设计",
+        "immuscope-duty-cn": "独立复现并扩展 ImmuScope，一种用于 MHC-II 抗原呈递及 CD4+ T 细胞表位预测的弱监督深度学习框架；使用 PyTorch 对 EL→CD4→免疫原性预测流程进行对齐复现，通过对照消融实验评估自迭代 MIL、微调阶段及度量学习目标对性能的贡献；在共享 CD4 测试集（779,135 个样本）上将 ImmuScope 与 NetMHCIIpan-4.3 和 MixMHC2pred-2.0 进行基准对比，采用配对 Bootstrap 推断及 Holm 校正 Wilcoxon 检验评估统计学显著性；开展划分敏感性分析，并整合 IEDB 中整理的结核分枝杆菌 CD4+ T 细胞表位数据进行探索性免疫原性数据扩展，在汇总 AUC 和 AUPR 上取得概念验证层面的提升；使用 Cursor 辅助论文框架整理并根据目标生成代码。",
+        "immuscope-title-en": "Reproduction and Experimental Exploration on ImmuScope",
+        "immuscope-nature-en": "Capstone Project for MSc in Biomedical Informatics",
+        "immuscope-duty-en": "Independently reproduced and extended ImmuScope, a weakly supervised deep-learning framework for MHC-II antigen presentation and CD4+ T-cell epitope prediction. Conducted paper-aligned reproduction of the EL-to-CD4-to-immunogenicity pipeline using PyTorch; performed controlled ablation experiments; benchmarked against NetMHCIIpan-4.3 and MixMHC2pred-2.0 on a shared CD4 test set of 779,135 samples; applied paired bootstrap inference and Holm-corrected Wilcoxon tests; conducted split-sensitivity analysis and an exploratory IEDB Mycobacterium tuberculosis epitope-data extension. Used Cursor to assist with paper structure organization and goal-driven code generation."
+      });
+      setFields("projects", {
+        "allergen-title-cn": "上海地区呼吸系统疾病患者过敏原谱状况分析",
+        "allergen-nature-cn": "医学检验技术学士学位论文",
+        "allergen-title-en": "Analysis of Serum Allergen Spectrums in Patients with Respiratory Disease in Shanghai",
+        "allergen-nature-en": "Graduation Thesis for BSc in Medical Laboratory Science",
+        "uveal-title-cn": "眼睛里的“黑客”——葡萄膜黑色素瘤",
+        "uveal-nature-cn": "医学科普与内容创作项目",
+        "uveal-title-en": "Hackers in the Eyes — Uveal Melanoma",
+        "official-title-cn": "在新媒体平台上主流文化和亚文化的冲突下官媒的定位",
+        "official-nature-cn": "新媒体传播调研项目",
+        "official-title-en": "The Orientation of Official Media under the Conflict between Mainstream Culture and Subculture on New Media Platforms",
+        "aml-nature-cn": "生物医学科研项目",
+        "aml-nature-en": "Biomedical research project"
+      });
+      setTitle("projects", "allergen-analysis", "上海地区呼吸系统疾病患者过敏原谱状况分析", "Analysis of Serum Allergen Spectrums in Patients with Respiratory Disease in Shanghai");
+      setTitle("projects", "uveal-melanoma", "眼睛里的“黑客”——葡萄膜黑色素瘤", "Hackers in the Eyes — Uveal Melanoma");
+      setTitle("projects", "official-media", "在新媒体平台上主流文化和亚文化的冲突下官媒的定位", "The Orientation of Official Media under the Conflict between Mainstream Culture and Subculture on New Media Platforms");
+      setTitle("projects", "aml-msc", "AML来源的MSC细胞在AML发生发展中的作用与分子机制", "Role and Molecular Mechanisms of AML-Derived MSC Cells in Development of AML");
+
+      setFields("skills", {
+        "skills-tech": "Python｜C｜PyTorch｜SPSS｜Numbers｜数据分析｜深度学习",
+        "skills-domain": "医学检验｜临床实验室流程｜CAR-T 细胞生产与检测｜实验室信息化与安全管理｜MHC-II / CD4+ T 细胞表位预测",
+        "skills-software": "Microsoft Office｜Adobe Photoshop｜Adobe Audition｜Adobe Lightroom｜Adobe Premiere｜Final Cut Pro｜Affinity Photo｜Procreate｜Procreate Dreams｜Zotero",
+        "skills-language": "IELTS 6.5｜CET-6 593｜LAJ 4（约日语 N3 水平）",
+        "skills-programming": "Python，C",
+        "skills-ai-tools": "使用 Cursor 等 AI 工具辅助项目框架整理，并按各任务目标进行目标驱动的 Vibe coding",
+        "skills-training": "2023 年度上海儿童医学中心药物和医疗器械临床试验质量管理培训（GCP 培训）",
+        "skills-hobbies": "绘画｜动画制作｜歌唱｜音频编辑｜视频制作｜摄影",
+        "strengths-cn": "我的经历连接临床问题、实验流程与生物医学数据方法，具备较强的流程、安全、细节与质量意识，并习惯在学习和工作任务中应用 PDCA。我能够在跨文化团队中协作，并将技术工作转化为清晰、可执行的沟通内容。",
+        "strengths-en": "My interdisciplinary path connects clinical questions, experimental workflows and biomedical data methods. I bring strong process, safety, detail and quality awareness, a PDCA mindset, and the ability to translate technical work into clear, actionable communication across cultures."
+      });
+      setFields("answers", {
+        "intro-cn": "您好，我叫董亦哲。本科毕业于上海交通大学医学院医学检验技术专业，目前在新加坡国立大学攻读生物医学信息学硕士，预计 2026 年 12 月毕业。我的经历从临床检验、CAR-T 细胞生产与检测，逐步延伸到生物医学数据和计算方法，包括对 MHC-II / CD4 表位预测框架的复现与实验探索。我重视流程、安全、细节与质量，能够连接临床问题、实验流程和数据方法，并习惯在学习和工作中应用 PDCA。",
+        "intro-en": "Hello, my name is Dong Yizhe. I graduated in Medical Laboratory Science from Shanghai Jiao Tong University School of Medicine and am currently pursuing an MSc in Biomedical Informatics at the National University of Singapore, with expected graduation in December 2026. My experience has progressed from clinical laboratory work and CAR-T cell production and testing to biomedical data and computational methods, including reproducing and experimentally exploring an MHC-II / CD4 epitope prediction framework. I bring strong process, safety, detail and quality awareness, the ability to bridge clinical questions, experimental workflows and data methods, and a PDCA mindset."
+      });
+
+      const honors = findSection("honors");
+      if (honors) {
+        const honorOrder = ["outstanding-graduate", "youth-league-award", "microbiology-award"];
+        const honorMap = new Map(honors.modules.filter(module => honorOrder.includes(module.id)).map(module => [module.id, module]));
+        honors.modules = honorOrder.map(id => honorMap.get(id)).filter(Boolean);
+      }
+      setTitle("honors", "microbiology-award", "检验系第七届基本技能操作竞赛", "7th Basic Skills Operation Competition");
+      setTitle("honors", "youth-league-award", "优秀共青团员", "Outstanding Youth League Member");
+      setTitle("honors", "outstanding-graduate", "上海交通大学2023届优秀毕业生", "Outstanding Graduate of Shanghai Jiao Tong University, Class of 2023");
+      setFields("honors", {
+        "honor-microbiology": "上海交通大学医学院检验系第七届基本技能操作大赛个人赛——微生物实验优胜奖｜2021 年 5 月",
+        "honor-microbiology-en": "Winning Prize in Microbiology Experiments, Individual Competition, 7th Basic Skills Operation Competition, Department of Laboratory Medicine, Shanghai Jiao Tong University School of Medicine｜May 2021",
+        "honor-youth-league": "2021–2022 年度“优秀共青团员”称号｜2022 年 5 月",
+        "honor-youth-league-en": "2021–2022 Outstanding Youth League Member｜May 2022",
+        "honor-graduate": "2023 届上海交通大学优秀毕业生｜2023 年 6 月",
+        "honor-graduate-en": "Outstanding Graduate of Shanghai Jiao Tong University, Class of 2023｜Jun 2023"
+      });
+
+      setTitle("activities", "acappella", "SJTU阿卡贝拉合唱团", "SJTU A Cappella Club");
+      setTitle("activities", "media-center", "上海交通大学医学院团委组织部宣传中心", "Media Center, Organization Department of Youth League Committee of Shanghai Jiao Tong University School of Medicine");
+      setFields("activities", {
+        "activity-acappella-cn": "成员；开展日常声乐训练、合唱排练及舞台演出；为社团专场或多社团联合演出进行平面设计，包括视觉主题、海报、喷绘、推送和门票等。",
+        "activity-acappella-en": "Member. Conducted daily vocal training, choir rehearsals, and stage performances; created graphic designs including visual themes, posters, banners, social-media posts and tickets for club-specific or multi-club joint performances.",
+        "activity-media-cn": "干事（2020年1月–2021年3月）兼主任（2021年3月–2022年1月）；负责院系团委组织部公众号运营，参与《青年大学习》的宣传、编辑、摄影、海报制作及创意设计；负责宣传中心日常工作。",
+        "activity-media-en": "Executive Secretary (Jan 2020–Mar 2021) and Director (Mar 2021–Jan 2022). Managed the official WeChat account, contributing to promotion, editing, photography, poster design and creative work for Great Youth Learning; managed day-to-day operations of the Media Center."
+      });
+
+      const activities = findSection("activities");
+      if (activities && !activities.modules.some(module => module.id === "kangaroo-learning")) {
+        activities.modules.unshift({
+          id: "kangaroo-learning",
+          title: "Kangaroo Learning Center",
+          titleCn: "袋鼠学习中心有限公司（方田教育，新加坡）",
+          titleEn: "Kangaroo Learning Center Pte. Ltd. (Fangtian Education, Singapore)",
+          category: "教育工作 / Teaching",
+          fields: [
+            { id: "activity-kangaroo-position-cn", label: "职位（中文）", value: "助教｜兼职", type: "中文" },
+            { id: "activity-kangaroo-start-cn", label: "开始时间（中文）", value: "2026 年 7 月", type: "中文" },
+            { id: "activity-kangaroo-end-cn", label: "结束时间（中文）", value: "2026 年 12 月（预计）", type: "中文" },
+            { id: "activity-kangaroo-cn", label: "活动内容（中文）", value: "在小学数学双师课堂中协助主讲教师，负责课时材料、座位安排、课堂节奏及 3 小时课时中的突发问题；组织、批改并记录课前课后测验，跟踪学生进度与课堂表现；向家长群同步课堂动态，核对并分发课堂笔记与作业；与家长沟通学习进度，制作难点讲解视频与文字摘要；协调讲座和校园活动现场支持，并协助维护校园安全与课堂纪律。", type: "中文", wide: true },
+            { id: "activity-kangaroo-position-en", label: "Position (English)", value: "Teaching Assistant | Part-time", type: "English" },
+            { id: "activity-kangaroo-start-en", label: "Start date (English)", value: "Jul 2026", type: "English" },
+            { id: "activity-kangaroo-end-en", label: "End date (English)", value: "Dec 2026 (Expected)", type: "English" },
+            { id: "activity-kangaroo-en", label: "Activity details (English)", value: "Supported lead teachers in a dual-teacher primary mathematics classroom, managing materials, seating, classroom flow and unexpected issues across three-hour sessions. Administered, marked and recorded quizzes; tracked progress and behaviour; delivered class updates and lesson notes to parents; communicated learning progress; created explainer videos and written summaries; coordinated seminar and school-event logistics and supported campus safety and discipline.", type: "English", wide: true }
+          ]
+        });
+      }
+      if (activities && !activities.modules.some(module => module.id === "sunflower-center")) {
+        activities.modules.push({
+          id: "sunflower-center",
+          title: "上海太阳花社区儿童服务中心",
+          titleCn: "上海太阳花社区儿童服务中心",
+          titleEn: "Shanghai Sunflower Community Children's Service Center",
+          category: "志愿服务 / Volunteer work",
+          fields: [
+            { id: "activity-sunflower-position-cn", label: "职位（中文）", value: "读书会志愿者", type: "中文" },
+            { id: "activity-sunflower-start-cn", label: "开始时间（中文）", value: "2020 年秋季", type: "中文" },
+            { id: "activity-sunflower-end-cn", label: "结束时间（中文）", value: "2022 年春季", type: "中文" },
+            { id: "activity-sunflower-cn", label: "活动内容（中文）", value: "准备绘本阅读课程；辅助管理课堂纪律。", type: "中文", wide: true },
+            { id: "activity-sunflower-position-en", label: "Position (English)", value: "Reading Club Volunteer", type: "English" },
+            { id: "activity-sunflower-start-en", label: "Start date (English)", value: "Autumn 2020", type: "English" },
+            { id: "activity-sunflower-end-en", label: "End date (English)", value: "Spring 2022", type: "English" },
+            { id: "activity-sunflower-en", label: "Activity details (English)", value: "Prepared picture-book reading sessions and assisted with classroom discipline management.", type: "English", wide: true }
+          ]
+        });
+      }
+      if (activities) {
+        const activityOrder = ["kangaroo-learning", "media-center", "acappella", "sunflower-center"];
+        const activityMap = new Map(activities.modules.map(module => [module.id, module]));
+        activities.modules = activityOrder.map(id => activityMap.get(id)).filter(Boolean);
+      }
     }
 
     function migratePeriodFields(sectionsToMigrate) {
@@ -1234,6 +1495,10 @@
               type: "待填写",
               hint: "可填写其他国家/地区号码"
             });
+          }
+          const answers = saved.find(section => section.id === "answers");
+          if (answers && Array.isArray(answers.fields)) {
+            answers.fields = answers.fields.filter(field => field.id !== "why-zs");
           }
           const experience = saved.find(section => section.id === "experience");
           if (experience && !Array.isArray(experience.modules)) {
@@ -1467,6 +1732,7 @@
                 <input class="module-title-input" id="${module.id}-title-en" type="text" data-module-title data-section-id="${sectionId}" data-module-id="${module.id}" data-language="English" placeholder="${escapeHtml(moduleTitlePlaceholder(sectionId, "English"))}" value="${escapeHtml(titles.titleEn)}" />
               </div>
             </div>
+            <button class="module-delete-button" type="button" data-delete-module data-section-id="${sectionId}" data-module-id="${module.id}" aria-label="删除模块">删除模块</button>
           </div>
           <div class="module-fields">
             ${orderedModuleFields(module, sectionId).map(field => fieldMarkup(field, sectionId, titles.titleCn || titles.titleEn)).join("")}
@@ -1894,6 +2160,21 @@
       saveState.textContent = "有未保存修改";
     }
 
+    function deleteModule(sectionId, moduleId) {
+      const section = sections.find(item => item.id === sectionId);
+      if (!section?.modules) return;
+      const module = section.modules.find(item => item.id === moduleId);
+      if (!module) return;
+      const title = moduleTitleValue(module, sectionId, "中文")
+        || moduleTitleValue(module, sectionId, "English")
+        || "此模块";
+      if (!window.confirm(`确定删除“${title}”吗？模块中的内容会被清除。`)) return;
+      section.modules = section.modules.filter(item => item.id !== moduleId);
+      saveState.textContent = "有未保存修改";
+      render();
+      showToast("已删除模块");
+    }
+
     function bindDynamicEvents() {
       document.querySelectorAll("[data-module-title]").forEach(input => {
         input.addEventListener("input", event => {
@@ -1919,6 +2200,12 @@
         button.addEventListener("click", () => {
           const input = document.getElementById(button.dataset.copy);
           copyText(input.value, button);
+        });
+      });
+
+      document.querySelectorAll("[data-delete-module]").forEach(button => {
+        button.addEventListener("click", () => {
+          deleteModule(button.dataset.sectionId, button.dataset.moduleId);
         });
       });
 
