@@ -353,13 +353,18 @@
     }
 
     .module-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
+      display: block;
       padding: 2px 2px 12px;
       margin-bottom: 14px;
       border-bottom: 1px solid #dfe7f1;
+    }
+
+    .module-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 12px;
+      margin-top: 12px;
+      border-top: 1px solid #dfe7f1;
     }
 
     .module-delete-button {
@@ -698,8 +703,6 @@
       .module-fields { grid-template-columns: 1fr; }
       .field-card.compact-field .field-input { max-width: 100%; }
       .experience-module { padding: 12px; }
-      .module-head { flex-direction: column; }
-      .module-delete-button { align-self: flex-end; }
       .module-title-grid { grid-template-columns: 1fr; }
       .module-title-input { font-size: 17px; }
       .section { padding: 16px; }
@@ -1732,10 +1735,12 @@
                 <input class="module-title-input" id="${module.id}-title-en" type="text" data-module-title data-section-id="${sectionId}" data-module-id="${module.id}" data-language="English" placeholder="${escapeHtml(moduleTitlePlaceholder(sectionId, "English"))}" value="${escapeHtml(titles.titleEn)}" />
               </div>
             </div>
-            <button class="module-delete-button" type="button" data-delete-module data-section-id="${sectionId}" data-module-id="${module.id}" aria-label="删除模块">删除模块</button>
           </div>
           <div class="module-fields">
             ${orderedModuleFields(module, sectionId).map(field => fieldMarkup(field, sectionId, titles.titleCn || titles.titleEn)).join("")}
+          </div>
+          <div class="module-footer">
+            <button class="module-delete-button" type="button" data-delete-module data-section-id="${sectionId}" data-module-id="${module.id}" aria-label="删除模块">删除模块</button>
           </div>
         </article>
       `;
