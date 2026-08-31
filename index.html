@@ -362,11 +362,45 @@
       border-bottom: 1px solid #dfe7f1;
     }
 
-    .module-title {
-      margin: 0;
+    .module-title-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+
+    .module-title-card {
+      min-width: 0;
+      padding: 10px 12px;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .module-title-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .module-title-input {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      outline: 0;
       color: var(--navy);
-      font-size: 21px;
-      line-height: 1.3;
+      background: transparent;
+      font-size: 18px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .module-title-input::placeholder {
+      color: #9aa6b6;
+      font-weight: 600;
     }
 
     .module-fields {
@@ -649,7 +683,8 @@
       .module-fields { grid-template-columns: 1fr; }
       .field-card.compact-field .field-input { max-width: 100%; }
       .experience-module { padding: 12px; }
-      .module-title { font-size: 18px; }
+      .module-title-grid { grid-template-columns: 1fr; }
+      .module-title-input { font-size: 17px; }
       .section { padding: 16px; }
       .field-card.wide { grid-column: auto; }
       .stat-list { margin-top: 4px; }
@@ -738,7 +773,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    const STORAGE_KEY = "resume-job-helper-v2";
+    const STORAGE_KEY = "resume-job-helper-v3";
 
     const initialSections = [
       {
@@ -1129,6 +1164,10 @@
     function cloneInitial() {
       const sections = JSON.parse(JSON.stringify(initialSections));
       sections.forEach(section => {
+        (section.modules || []).forEach(module => {
+          module.titleCn = "";
+          module.titleEn = "";
+        });
         const fields = [
           ...(section.fields || []),
           ...(section.modules || []).flatMap(module => module.fields || [])
@@ -1372,22 +1411,73 @@
       `;
     }
 
+    function isModuleTitleField(field, sectionId) {
+      const text = `${field.id} ${field.label}`.toLowerCase();
+      if (sectionId === "education") return /school|学校/.test(text);
+      if (sectionId === "experience") return /company|organization|公司|机构/.test(text);
+      if (sectionId === "projects") return /title|题目/.test(text);
+      if (sectionId === "honors") return /荣誉名称|award\s*\/\s*recognition/.test(text);
+      return false;
+    }
+
+    function moduleTitleParts(module, sectionId) {
+      const chineseTitleField = module.fields.find(field =>
+        field.type !== "English" && isModuleTitleField(field, sectionId)
+      );
+      const englishTitleField = module.fields.find(field =>
+        field.type === "English" && isModuleTitleField(field, sectionId)
+      );
+      const titleCn = Object.prototype.hasOwnProperty.call(module, "titleCn")
+        ? module.titleCn
+        : chineseTitleField?.value || module.title || "";
+      const titleEn = Object.prototype.hasOwnProperty.call(module, "titleEn")
+        ? module.titleEn
+        : englishTitleField?.value || module.title || "";
+      return { titleCn: titleCn || "", titleEn: titleEn || "" };
+    }
+
+    function moduleTitleValue(module, sectionId, language) {
+      const titles = moduleTitleParts(module, sectionId);
+      return language === "English" ? titles.titleEn : titles.titleCn;
+    }
+
+    function moduleTitlePlaceholder(sectionId, language) {
+      const placeholders = {
+        education: language === "English" ? "Enter school name" : "填写学校名称",
+        experience: language === "English" ? "Enter company / organization" : "填写公司 / 机构名称",
+        projects: language === "English" ? "Enter project name" : "填写项目名称",
+        honors: language === "English" ? "Enter award name" : "填写荣誉名称",
+        activities: language === "English" ? "Enter activity name" : "填写活动名称"
+      };
+      return placeholders[sectionId] || (language === "English" ? "Enter title" : "填写标题");
+    }
+
     function moduleMarkup(module, sectionId) {
+      const titles = moduleTitleParts(module, sectionId);
       return `
         <article class="experience-module" data-module="${module.id}">
           <div class="module-head">
-            <h3 class="module-title">${escapeHtml(module.title)}</h3>
+            <div class="module-title-grid">
+              <div class="module-title-card">
+                <label class="module-title-label" for="${module.id}-title-cn">大标题（中文）</label>
+                <input class="module-title-input" id="${module.id}-title-cn" type="text" data-module-title data-section-id="${sectionId}" data-module-id="${module.id}" data-language="中文" placeholder="${escapeHtml(moduleTitlePlaceholder(sectionId, "中文"))}" value="${escapeHtml(titles.titleCn)}" />
+              </div>
+              <div class="module-title-card">
+                <label class="module-title-label" for="${module.id}-title-en">Main title (English)</label>
+                <input class="module-title-input" id="${module.id}-title-en" type="text" data-module-title data-section-id="${sectionId}" data-module-id="${module.id}" data-language="English" placeholder="${escapeHtml(moduleTitlePlaceholder(sectionId, "English"))}" value="${escapeHtml(titles.titleEn)}" />
+              </div>
+            </div>
           </div>
           <div class="module-fields">
-            ${orderedModuleFields(module).map(field => fieldMarkup(field, sectionId, module.title)).join("")}
+            ${orderedModuleFields(module, sectionId).map(field => fieldMarkup(field, sectionId, titles.titleCn || titles.titleEn)).join("")}
           </div>
         </article>
       `;
     }
 
-    function orderedModuleFields(module) {
+    function orderedModuleFields(module, sectionId) {
       const groups = new Map();
-      module.fields.forEach((field, index) => {
+      module.fields.filter(field => !isModuleTitleField(field, sectionId)).forEach((field, index) => {
         const key = field.id.replace(/-(?:cn|en)$/, "");
         if (!groups.has(key)) groups.set(key, { index, fields: [] });
         groups.get(key).fields.push(field);
@@ -1434,7 +1524,10 @@
       }).join("");
       document.getElementById("fieldCount").textContent = sections.reduce((total, section) => {
         const fieldCount = (section.fields || []).length;
-        const moduleFieldCount = (section.modules || []).reduce((count, module) => count + module.fields.length, 0);
+        const moduleFieldCount = (section.modules || []).reduce(
+          (count, module) => count + orderedModuleFields(module, section.id).length,
+          0
+        );
         return total + fieldCount + moduleFieldCount;
       }, 0);
       bindDynamicEvents();
@@ -1520,7 +1613,8 @@
 
     function modulePdfEntry(module, language, kind) {
       const isEnglish = language === "English";
-      const title = moduleValue(module, language, isEnglish ? /title|company|organization/i : /题目|公司|机构/);
+      const sectionId = kind === "project" ? "projects" : "experience";
+      const title = moduleTitleValue(module, sectionId, language);
       const date = modulePeriod(module, language);
       const subtitle = moduleValue(module, language, isEnglish ? /nature|position/i : /性质|职位/);
       const duty = moduleValue(module, language, isEnglish ? /responsibilities/i : /职责/);
@@ -1535,7 +1629,7 @@
       const education = sections.find(section => section.id === "education");
       if (!education) return "";
       return orderedModules(education).map(module => {
-        const title = moduleValue(module, language, isEnglish ? /school/i : /学校/) || module.title;
+        const title = moduleTitleValue(module, "education", language);
         const date = modulePeriod(module, language);
         const college = moduleValue(module, language, isEnglish ? /college/i : /学院/);
         const major = moduleValue(module, language, isEnglish ? /major|degree/i : /专业|学位/);
@@ -1574,7 +1668,7 @@
           .map(field => field.value)
           .filter(Boolean)
           .join(" ");
-        return pdfEntry(module.title, date, "", detail);
+        return pdfEntry(moduleTitleValue(module, "activities", language), date, "", detail);
       }).join("");
     }
 
@@ -1586,7 +1680,7 @@
           ? field.type === "English"
           : field.type !== "English");
         const detail = fields.map(field => field.value).filter(Boolean).join(" ");
-        return pdfEntry(module.title, "", "", detail);
+        return pdfEntry(moduleTitleValue(module, "honors", language), "", "", detail);
       }).join("");
     }
 
@@ -1792,7 +1886,26 @@
       }, 1400);
     }
 
+    function updateModuleTitle(sectionId, moduleId, language, value) {
+      const section = sections.find(item => item.id === sectionId);
+      const module = section?.modules?.find(item => item.id === moduleId);
+      if (!module) return;
+      module[language === "English" ? "titleEn" : "titleCn"] = value;
+      saveState.textContent = "有未保存修改";
+    }
+
     function bindDynamicEvents() {
+      document.querySelectorAll("[data-module-title]").forEach(input => {
+        input.addEventListener("input", event => {
+          updateModuleTitle(
+            input.dataset.sectionId,
+            input.dataset.moduleId,
+            input.dataset.language,
+            event.target.value
+          );
+        });
+      });
+
       document.querySelectorAll(".field-input").forEach(input => {
         input.addEventListener("input", event => {
           saveState.textContent = "有未保存修改";
@@ -1841,7 +1954,7 @@
         education: {
           title: "新教育经历",
           category: "教育经历 / Education",
-          focus: "school-cn",
+          focus: "title-cn",
           fields: [
             ["school-cn", "学校", "中文"],
             ["college-cn", "学院", "中文"],
@@ -1862,7 +1975,7 @@
         honors: {
           title: "新荣誉模块",
           category: "个人荣誉 / Honor",
-          focus: "name-cn",
+          focus: "title-cn",
           fields: [
             ["name-cn", "荣誉名称（中文）", "中文"],
             ["name-en", "Award / recognition (English)", "English"],
@@ -1872,7 +1985,7 @@
         activities: {
           title: "新活动模块",
           category: "课外活动 / Activity",
-          focus: "detail-cn",
+          focus: "title-cn",
           fields: [
             ["detail-cn", "活动内容（中文）", "中文", true],
             ["start-cn", "开始时间（中文）", "中文"],
@@ -1902,7 +2015,7 @@
         experience: {
           title: "新经历模块",
           category: "工作经历 / Internship",
-          focus: "company-cn",
+          focus: "title-cn",
           fields: [
             ["company-cn", "公司 / 机构（中文）", "中文"],
             ["position-cn", "职位（中文）", "中文"],
@@ -1921,6 +2034,8 @@
       section.modules.push({
         id,
         title: preset.title,
+        titleCn: "",
+        titleEn: "",
         category: preset.category,
         fields: preset.fields.map(([suffix, label, type, wide]) => ({
           id: `${id}-${suffix}`,
@@ -1965,8 +2080,9 @@
       const output = sections.map(section => {
         if (section.modules) {
           return `【${section.title}】\n${section.modules.map(module => {
-            const fields = orderedModuleFields(module).map(field => `${field.label}\n${field.value}`).join("\n\n");
-            return `【${module.title}】\n${fields}`;
+            const fields = orderedModuleFields(module, section.id).map(field => `${field.label}\n${field.value}`).join("\n\n");
+            const titles = moduleTitleParts(module, section.id);
+            return `【${titles.titleCn || titles.titleEn}】\n${fields}`;
           }).join("\n\n")}`;
         }
         const fields = section.fields.map(field => `${field.label}\n${field.value}`).join("\n\n");
