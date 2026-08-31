@@ -738,7 +738,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    const STORAGE_KEY = "resume-job-helper-v1";
+    const STORAGE_KEY = "resume-job-helper-v2";
 
     const initialSections = [
       {
@@ -1127,7 +1127,18 @@
     }
 
     function cloneInitial() {
-      return JSON.parse(JSON.stringify(initialSections));
+      const sections = JSON.parse(JSON.stringify(initialSections));
+      sections.forEach(section => {
+        const fields = [
+          ...(section.fields || []),
+          ...(section.modules || []).flatMap(module => module.fields || [])
+        ];
+        fields.forEach(field => {
+          field.value = "";
+          field.placeholder = field.placeholder || "待填写";
+        });
+      });
+      return sections;
     }
 
     function migratePeriodFields(sectionsToMigrate) {
@@ -1337,7 +1348,11 @@
     function fieldMarkup(field, sectionId, moduleTitle = "") {
       const searchableLabel = moduleTitle ? `${moduleTitle} · ${field.label}` : field.label;
       const value = field.value || "";
-      const isLongField = Boolean((field.wide && !value) || value.length > 80 || value.includes("\n"));
+      const isLongField = Boolean(
+        value.length > 80
+        || value.includes("\n")
+        || (field.wide && /duty|responsibilit|course|detail|explanation|strength|introduction|answer|职责|课程|说明|优势|介绍|回答/i.test(`${field.id} ${field.label}`))
+      );
       const isSingleLine = field.singleLine ?? !isLongField;
       const control = isSingleLine
         ? `<input class="field-input ${field.placeholder && !value ? "placeholder-input" : ""}" id="${field.id}" type="text" data-section-id="${sectionId}" data-field-id="${field.id}" placeholder="${escapeHtml(field.placeholder || "")}" aria-label="${escapeHtml(searchableLabel)}" value="${escapeHtml(value)}" />`
@@ -1364,10 +1379,25 @@
             <h3 class="module-title">${escapeHtml(module.title)}</h3>
           </div>
           <div class="module-fields">
-            ${module.fields.map(field => fieldMarkup(field, sectionId, module.title)).join("")}
+            ${orderedModuleFields(module).map(field => fieldMarkup(field, sectionId, module.title)).join("")}
           </div>
         </article>
       `;
+    }
+
+    function orderedModuleFields(module) {
+      const groups = new Map();
+      module.fields.forEach((field, index) => {
+        const key = field.id.replace(/-(?:cn|en)$/, "");
+        if (!groups.has(key)) groups.set(key, { index, fields: [] });
+        groups.get(key).fields.push(field);
+      });
+      return [...groups.values()]
+        .sort((a, b) => a.index - b.index)
+        .flatMap(group => [
+          ...group.fields.filter(field => field.type !== "English"),
+          ...group.fields.filter(field => field.type === "English")
+        ]);
     }
 
     function render() {
@@ -1935,7 +1965,7 @@
       const output = sections.map(section => {
         if (section.modules) {
           return `【${section.title}】\n${section.modules.map(module => {
-            const fields = module.fields.map(field => `${field.label}\n${field.value}`).join("\n\n");
+            const fields = orderedModuleFields(module).map(field => `${field.label}\n${field.value}`).join("\n\n");
             return `【${module.title}】\n${fields}`;
           }).join("\n\n")}`;
         }
