@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>招聘网站信息助手 · 董亦哲</title>
+  <title>招聘网站信息助手</title>
   <style>
     :root {
       --ink: #17253d;
@@ -732,7 +732,7 @@
       <button class="tool-button primary" id="save" type="button">保存修改</button>
       <button class="tool-button" id="exportCn" type="button">导出简历 PDF</button>
       <button class="tool-button" id="exportEn" type="button">导出 Resume PDF</button>
-      <button class="tool-button" id="reset" type="button">恢复初始内容</button>
+      <button class="tool-button" id="reset" type="button">清空并初始化</button>
       <div class="save-state"><i class="save-dot"></i><span id="saveState">已加载本地内容</span></div>
     </div>
     <input id="fileInput" type="file" accept=".pdf,.txt,.md,.json,application/pdf,text/plain,application/json" hidden />
@@ -783,7 +783,7 @@
       </main>
     </div>
 
-    <footer class="footer">内容整理自最新版 Resume-Dong Yizhe 及相关面试准备材料 · <a href="README.md">查看网页共享部署说明</a> · 个人联系方式请在投递前核对</footer>
+    <footer class="footer">空白简历填写模板 · <a href="README.md">查看网页共享部署说明</a> · 个人联系方式请在投递前填写并核对</footer>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -793,7 +793,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    const STORAGE_KEY = "resume-job-helper-v4";
+    const STORAGE_KEY = "resume-job-helper-v5";
 
     const initialSections = [
       {
@@ -802,16 +802,16 @@
         title: "个人信息",
         note: "招聘网站最常见的基础字段",
         fields: [
-          { id: "name-cn", label: "中文姓名", value: "董亦哲", type: "基础信息" },
-          { id: "name-en", label: "英文姓名", value: "Yizhe Dong", type: "基础信息" },
-          { id: "dob", label: "出生日期", value: "2001 年 5 月 24 日", type: "基础信息" },
-          { id: "gender", label: "性别", value: "女", type: "基础信息" },
-          { id: "phone", label: "手机号码", value: "13701854112", type: "基础信息" },
+          { id: "name-cn", label: "中文姓名", value: "", type: "基础信息" },
+          { id: "name-en", label: "英文姓名", value: "", type: "基础信息" },
+          { id: "dob", label: "出生日期", value: "", type: "基础信息" },
+          { id: "gender", label: "性别", value: "", type: "基础信息" },
+          { id: "phone", label: "手机号码", value: "", type: "基础信息" },
           { id: "backup-phone", label: "备用手机号码", value: "", placeholder: "待填写", type: "待填写", hint: "可填写其他国家/地区号码" },
-          { id: "email", label: "电子邮箱", value: "abby.dyz@qq.com", type: "基础信息" },
-          { id: "location", label: "目前所在地", value: "Singapore / 新加坡", type: "基础信息" },
+          { id: "email", label: "电子邮箱", value: "", type: "基础信息" },
+          { id: "location", label: "目前所在地", value: "", type: "基础信息" },
           { id: "linkedin", label: "LinkedIn / 个人主页", value: "", placeholder: "待填写", type: "待填写", hint: "可填链接或 N/A" },
-          { id: "target-role", label: "目标职位方向", value: "Healthcare & Life Sciences Consulting / Analytics / AI", type: "求职意向", wide: true }
+          { id: "target-role", label: "目标职位方向", value: "", type: "求职意向", wide: true }
         ]
       },
       {
@@ -822,44 +822,44 @@
         modules: [
           {
             id: "nus-education",
-            title: "新加坡国立大学",
+            title: "",
             category: "教育经历 / Education",
             fields: [
-              { id: "edu-nus-school", label: "学校", value: "新加坡国立大学", type: "中文" },
-              { id: "edu-nus-college", label: "学院", value: "杨潞龄医学院", type: "中文" },
-              { id: "edu-nus-major", label: "专业 / 学位", value: "生物医学信息学硕士", type: "中文" },
-              { id: "edu-nus-start", label: "开始时间", value: "2025 年 8 月", type: "中文" },
-              { id: "edu-nus-end", label: "结束时间", value: "至今", type: "中文" },
-              { id: "edu-nus-gpa", label: "GPA", value: "N/A", type: "中文" },
-              { id: "edu-nus-courses", label: "主要课程", value: "Advanced Biomedical Informatics；Medical Data and Data Processing；Advanced Agile Project Management；Software Development Fundamentals (Python)；Data Structures and Algorithms；Artificial Intelligence；Japanese (About N3)", type: "中文", wide: true },
-              { id: "edu-nus-school-en", label: "School", value: "National University of Singapore", type: "English", wide: true },
-              { id: "edu-nus-college-en", label: "College", value: "Yong Loo Lin School of Medicine", type: "English", wide: true },
-              { id: "edu-nus-major-en", label: "Major / Degree", value: "MSc in Biomedical Informatics", type: "English", wide: true },
-              { id: "edu-nus-start-en", label: "Start date", value: "Aug 2025", type: "English" },
-              { id: "edu-nus-end-en", label: "End date", value: "Present", type: "English" },
-              { id: "edu-nus-gpa-en", label: "GPA", value: "N/A", type: "English", wide: true },
-              { id: "edu-nus-courses-en", label: "Major courses", value: "Advanced Biomedical Informatics; Medical Data and Data Processing; Advanced Agile Project Management; Software Development Fundamentals (Python); Data Structures and Algorithms; Artificial Intelligence; Japanese (About N3)", type: "English", wide: true }
+              { id: "edu-nus-school", label: "学校", value: "", type: "中文" },
+              { id: "edu-nus-college", label: "学院", value: "", type: "中文" },
+              { id: "edu-nus-major", label: "专业 / 学位", value: "", type: "中文" },
+              { id: "edu-nus-start", label: "开始时间", value: "", type: "中文" },
+              { id: "edu-nus-end", label: "结束时间", value: "", type: "中文" },
+              { id: "edu-nus-gpa", label: "GPA", value: "", type: "中文" },
+              { id: "edu-nus-courses", label: "主要课程", value: "", type: "中文", wide: true },
+              { id: "edu-nus-school-en", label: "School", value: "", type: "English", wide: true },
+              { id: "edu-nus-college-en", label: "College", value: "", type: "English", wide: true },
+              { id: "edu-nus-major-en", label: "Major / Degree", value: "", type: "English", wide: true },
+              { id: "edu-nus-start-en", label: "Start date", value: "", type: "English" },
+              { id: "edu-nus-end-en", label: "End date", value: "", type: "English" },
+              { id: "edu-nus-gpa-en", label: "GPA", value: "", type: "English", wide: true },
+              { id: "edu-nus-courses-en", label: "Major courses", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "sjtu-education",
-            title: "上海交通大学",
+            title: "",
             category: "教育经历 / Education",
             fields: [
-              { id: "edu-sjtu-school", label: "学校", value: "上海交通大学", type: "中文" },
-              { id: "edu-sjtu-college", label: "学院", value: "医学院", type: "中文" },
-              { id: "edu-sjtu-major", label: "专业 / 学位", value: "医学检验技术本科", type: "中文" },
-              { id: "edu-sjtu-start", label: "开始时间", value: "2019 年 9 月", type: "中文" },
-              { id: "edu-sjtu-end", label: "结束时间", value: "2023 年 7 月", type: "中文" },
-              { id: "edu-sjtu-gpa", label: "GPA", value: "3.44 / 4.3", type: "中文" },
-              { id: "edu-sjtu-courses", label: "主要课程", value: "Programming (C language)；Analytical Chemistry and Instrumental Analysis；Hygiene Statistics；Basic Clinical Laboratory；Clinical Immunology；Clinical Biochemistry；Clinical Microbiology；Clinical Transfusion；Clinical Hematology；Laboratory Management 等", type: "中文", wide: true },
-              { id: "edu-sjtu-school-en", label: "School", value: "Shanghai Jiao Tong University", type: "English", wide: true },
-              { id: "edu-sjtu-college-en", label: "College", value: "School of Medicine", type: "English", wide: true },
-              { id: "edu-sjtu-major-en", label: "Major / Degree", value: "Medical Laboratory Science", type: "English", wide: true },
-              { id: "edu-sjtu-start-en", label: "Start date", value: "Sep 2019", type: "English" },
-              { id: "edu-sjtu-end-en", label: "End date", value: "Jul 2023", type: "English" },
-              { id: "edu-sjtu-gpa-en", label: "GPA", value: "3.44 / 4.3", type: "English", wide: true },
-              { id: "edu-sjtu-courses-en", label: "Major courses", value: "Programming (C language); Analytical Chemistry and Instrumental Analysis; Hygiene Statistics; Basic Clinical Laboratory; Clinical Immunology; Clinical Biochemistry; Clinical Microbiology; Clinical Transfusion; Clinical Hematology; Laboratory Management, etc.", type: "English", wide: true }
+              { id: "edu-sjtu-school", label: "学校", value: "", type: "中文" },
+              { id: "edu-sjtu-college", label: "学院", value: "", type: "中文" },
+              { id: "edu-sjtu-major", label: "专业 / 学位", value: "", type: "中文" },
+              { id: "edu-sjtu-start", label: "开始时间", value: "", type: "中文" },
+              { id: "edu-sjtu-end", label: "结束时间", value: "", type: "中文" },
+              { id: "edu-sjtu-gpa", label: "GPA", value: "", type: "中文" },
+              { id: "edu-sjtu-courses", label: "主要课程", value: "", type: "中文", wide: true },
+              { id: "edu-sjtu-school-en", label: "School", value: "", type: "English", wide: true },
+              { id: "edu-sjtu-college-en", label: "College", value: "", type: "English", wide: true },
+              { id: "edu-sjtu-major-en", label: "Major / Degree", value: "", type: "English", wide: true },
+              { id: "edu-sjtu-start-en", label: "Start date", value: "", type: "English" },
+              { id: "edu-sjtu-end-en", label: "End date", value: "", type: "English" },
+              { id: "edu-sjtu-gpa-en", label: "GPA", value: "", type: "English", wide: true },
+              { id: "edu-sjtu-courses-en", label: "Major courses", value: "", type: "English", wide: true }
             ]
           }
         ]
@@ -872,53 +872,53 @@
         modules: [
           {
             id: "ruijin",
-            title: "瑞金医院（上海交通大学医学院）",
+            title: "",
             category: "工作经历 / Employment",
             fields: [
-              { id: "ruijin-company-cn", label: "公司 / 机构（中文）", value: "瑞金医院（上海交通大学医学院）", type: "中文" },
-              { id: "ruijin-position-cn", label: "职位（中文）", value: "党委宣传办公室工作人员（临时工作）", type: "中文" },
-              { id: "ruijin-start-cn", label: "开始时间（中文）", value: "2021 年 8 月", type: "中文" },
-              { id: "ruijin-end-cn", label: "结束时间（中文）", value: "2021 年 8 月", type: "中文" },
-              { id: "ruijin-duty-cn", label: "职责（中文）", value: "为医院公众号设计平面海报、绘制科普漫画和推送插画；制作科普推文、整理文字，参与文化学习和政治宣传。", type: "中文", wide: true },
-              { id: "ruijin-company-en", label: "Company / organization (English)", value: "Ruijin Hospital, Shanghai Jiao Tong University School of Medicine", type: "English", wide: true },
-              { id: "ruijin-position-en", label: "Position (English)", value: "Staff of the Party Committee’s Propaganda Office (Temporary Work)", type: "English", wide: true },
-              { id: "ruijin-start-en", label: "Start date (English)", value: "Aug 2021", type: "English" },
-              { id: "ruijin-end-en", label: "End date (English)", value: "Aug 2021", type: "English" },
-              { id: "ruijin-duty-en", label: "Responsibilities (English)", value: "Designed graphic posters, drew science-popularization comics and illustrations for the hospital’s public account. Produced science-popularization posts, organized text, and supported cultural learning and political advocacy.", type: "English", wide: true }
+              { id: "ruijin-company-cn", label: "公司 / 机构（中文）", value: "", type: "中文" },
+              { id: "ruijin-position-cn", label: "职位（中文）", value: "", type: "中文" },
+              { id: "ruijin-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "ruijin-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "ruijin-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "ruijin-company-en", label: "Company / organization (English)", value: "", type: "English", wide: true },
+              { id: "ruijin-position-en", label: "Position (English)", value: "", type: "English", wide: true },
+              { id: "ruijin-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "ruijin-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "ruijin-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "spbio",
-            title: "上海医药集团生物治疗技术有限公司",
+            title: "",
             category: "工作经历 / Employment",
             fields: [
-              { id: "spbio-company-cn", label: "公司（中文）", value: "上海医药集团生物治疗技术有限公司", type: "中文" },
-              { id: "spbio-position-cn", label: "职位（中文）", value: "CMC 细胞生产部门成员", type: "中文" },
-              { id: "spbio-start-cn", label: "开始时间（中文）", value: "2023 年 7 月", type: "中文" },
-              { id: "spbio-end-cn", label: "结束时间（中文）", value: "2025 年 4 月", type: "中文" },
-              { id: "spbio-duty-cn", label: "职责（中文）", value: "参与 CAR-T 细胞生产和检测，接触 T-cell isolation and culture、transfection、efficiency assessment；同时参与实验室信息管理和安全相关工作，建立了对生物制药流程、质量和执行纪律的实践理解。", type: "中文", wide: true },
-              { id: "spbio-company-en", label: "Company (English)", value: "Shanghai Pharmaceuticals Holding Bio-therapeutics", type: "English" },
-              { id: "spbio-position-en", label: "Position (English)", value: "CMC Cell Production Department Member", type: "English" },
-              { id: "spbio-start-en", label: "Start date (English)", value: "Jul 2023", type: "English" },
-              { id: "spbio-end-en", label: "End date (English)", value: "Apr 2025", type: "English" },
-              { id: "spbio-duty-en", label: "Responsibilities (English)", value: "Participated in CAR-T cell production and testing in the CMC Cell Production Department, including T-cell isolation and culture, transfection and efficiency assessment. Also contributed to laboratory information and safety management, gaining practical exposure to biopharmaceutical workflows, quality and process discipline.", type: "English", wide: true }
+              { id: "spbio-company-cn", label: "公司（中文）", value: "", type: "中文" },
+              { id: "spbio-position-cn", label: "职位（中文）", value: "", type: "中文" },
+              { id: "spbio-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "spbio-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "spbio-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "spbio-company-en", label: "Company (English)", value: "", type: "English" },
+              { id: "spbio-position-en", label: "Position (English)", value: "", type: "English" },
+              { id: "spbio-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "spbio-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "spbio-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "sgh",
-            title: "上海市第一人民医院检验科",
+            title: "",
             category: "实习经历 / Internship",
             fields: [
-              { id: "sgh-company-cn", label: "公司 / 机构（中文）", value: "上海市第一人民医院", type: "中文" },
-              { id: "sgh-position-cn", label: "职位（中文）", value: "检验科实习生", type: "中文" },
-              { id: "sgh-start-cn", label: "开始时间（中文）", value: "2022 年 7 月", type: "中文" },
-              { id: "sgh-end-cn", label: "结束时间（中文）", value: "2022 年 12 月", type: "中文" },
-              { id: "sgh-duty-cn", label: "职责（中文）", value: "在检验科实习，接触生化、免疫、质谱、流式、分子诊断、血液和输血等模块，参与采血、样本处理、报告解读、仪器维护和实验室管理。", type: "中文", wide: true },
-              { id: "sgh-company-en", label: "Organization (English)", value: "Shanghai General Hospital", type: "English" },
-              { id: "sgh-position-en", label: "Position (English)", value: "Laboratory Intern", type: "English" },
-              { id: "sgh-start-en", label: "Start date (English)", value: "Jul 2022", type: "English" },
-              { id: "sgh-end-en", label: "End date (English)", value: "Dec 2022", type: "English" },
-              { id: "sgh-duty-en", label: "Responsibilities (English)", value: "Interned in the laboratory department and was exposed to biochemistry, immunology, mass spectrometry, flow cytometry, molecular diagnostics, hematology and transfusion testing. Supported blood collection, sample processing, report interpretation, instrument maintenance and laboratory operations.", type: "English", wide: true }
+              { id: "sgh-company-cn", label: "公司 / 机构（中文）", value: "", type: "中文" },
+              { id: "sgh-position-cn", label: "职位（中文）", value: "", type: "中文" },
+              { id: "sgh-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "sgh-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "sgh-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "sgh-company-en", label: "Organization (English)", value: "", type: "English" },
+              { id: "sgh-position-en", label: "Position (English)", value: "", type: "English" },
+              { id: "sgh-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "sgh-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "sgh-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           }
         ]
@@ -931,121 +931,121 @@
         modules: [
           {
             id: "immuscope",
-            title: "ImmuScope",
+            title: "",
             category: "科研项目 / Research project",
             fields: [
-              { id: "immuscope-title-cn", label: "题目（中文）", value: "ImmuScope", type: "中文" },
-              { id: "immuscope-start-cn", label: "开始时间（中文）", value: "2026 年 2 月", type: "中文" },
-              { id: "immuscope-end-cn", label: "结束时间（中文）", value: "2026 年 4 月", type: "中文" },
-              { id: "immuscope-nature-cn", label: "项目性质（中文）", value: "科研复现与算法分析项目", type: "中文" },
-              { id: "immuscope-duty-cn", label: "职责（中文）", value: "独立复现并扩展一个用于 MHC-II 抗原呈递和 CD4+ T 细胞表位预测的弱监督深度学习框架。使用 PyTorch 重建 EL→CD4→免疫原性预测流程；通过消融实验分析自迭代 MIL、微调和度量学习的贡献；在 779,135 个样本的共享测试集上与 NetMHCIIpan-4.3、MixMHC2pred-2.0 比较，并使用 paired bootstrap 与 Holm-corrected Wilcoxon tests 评估差异；完成 split-sensitivity analysis，并探索性引入 IEDB 结核分枝杆菌 CD4+ T 细胞表位数据。", type: "中文", wide: true },
-              { id: "immuscope-title-en", label: "Title (English)", value: "ImmuScope", type: "English" },
-              { id: "immuscope-start-en", label: "Start date (English)", value: "Feb 2026", type: "English" },
-              { id: "immuscope-end-en", label: "End date (English)", value: "Apr 2026", type: "English" },
-              { id: "immuscope-nature-en", label: "Project nature (English)", value: "Research reproduction and computational analysis project", type: "English" },
-              { id: "immuscope-duty-en", label: "Responsibilities (English)", value: "Independently reproduced and extended a weakly supervised deep-learning framework for MHC-II antigen presentation and CD4+ T-cell epitope prediction. Rebuilt the EL-to-CD4-to-immunogenicity pipeline in PyTorch, ran controlled ablation experiments, benchmarked against NetMHCIIpan-4.3 and MixMHC2pred-2.0 on a shared test set of 779,135 samples, and used paired bootstrap and Holm-corrected Wilcoxon tests to evaluate performance differences. Also conducted split-sensitivity analysis and explored IEDB Mycobacterium tuberculosis CD4+ T-cell epitope data.", type: "English", wide: true }
+              { id: "immuscope-title-cn", label: "题目（中文）", value: "", type: "中文" },
+              { id: "immuscope-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "immuscope-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "immuscope-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "immuscope-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "immuscope-title-en", label: "Title (English)", value: "", type: "English" },
+              { id: "immuscope-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "immuscope-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "immuscope-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "immuscope-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "traffic-diversion",
-            title: "Feasibility of Pedestrian and Vehicle Diversion in Key Areas of Campus Traffic",
+            title: "",
             category: "调研项目 / Research project",
             fields: [
-              { id: "traffic-title-cn", label: "题目（中文）", value: "校园重点区域人车分流可行性研究", type: "中文" },
-              { id: "traffic-start-cn", label: "开始时间（中文）", value: "2019 年 11 月", type: "中文" },
-              { id: "traffic-end-cn", label: "结束时间（中文）", value: "2019 年 12 月", type: "中文" },
-              { id: "traffic-nature-cn", label: "项目性质（中文）", value: "校园交通调研项目", type: "中文" },
-              { id: "traffic-duty-cn", label: "职责（中文）", value: "作为小组成员设计校园交通现状问卷，收集数据并开展调研分析，形成结论并完成调查报告。", type: "中文", wide: true },
-              { id: "traffic-title-en", label: "Title (English)", value: "Feasibility of Pedestrian and Vehicle Diversion in Key Areas of Campus Traffic", type: "English", wide: true },
-              { id: "traffic-start-en", label: "Start date (English)", value: "Nov 2019", type: "English" },
-              { id: "traffic-end-en", label: "End date (English)", value: "Dec 2019", type: "English" },
-              { id: "traffic-nature-en", label: "Project nature (English)", value: "Campus transportation research project", type: "English" },
-              { id: "traffic-duty-en", label: "Responsibilities (English)", value: "As a group member, created a questionnaire on campus transportation conditions, collected data, conducted research and analysis, drew conclusions and wrote the survey report.", type: "English", wide: true }
+              { id: "traffic-title-cn", label: "题目（中文）", value: "", type: "中文" },
+              { id: "traffic-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "traffic-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "traffic-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "traffic-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "traffic-title-en", label: "Title (English)", value: "", type: "English", wide: true },
+              { id: "traffic-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "traffic-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "traffic-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "traffic-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "aml-msc",
-            title: "Role and Molecular Mechanisms of AML-Derived MSC Cells in Development of AML",
+            title: "",
             category: "科研项目 / Research project",
             fields: [
-              { id: "aml-title-cn", label: "题目（中文）", value: "AML 来源 MSC 细胞在 AML 发生发展中的作用及分子机制", type: "中文", wide: true },
-              { id: "aml-start-cn", label: "开始时间（中文）", value: "2021 年 3 月", type: "中文" },
-              { id: "aml-end-cn", label: "结束时间（中文）", value: "2023 年 6 月", type: "中文" },
-              { id: "aml-nature-cn", label: "项目性质（中文）", value: "生物医学科研项目", type: "中文" },
-              { id: "aml-duty-cn", label: "职责（中文）", value: "作为小组成员查阅 AML 背景资料，开展研究并完成实验设计；学习无菌操作和生物安全柜的使用。", type: "中文", wide: true },
-              { id: "aml-title-en", label: "Title (English)", value: "Role and Molecular Mechanisms of AML-Derived MSC Cells in Development of AML", type: "English", wide: true },
-              { id: "aml-start-en", label: "Start date (English)", value: "Mar 2021", type: "English" },
-              { id: "aml-end-en", label: "End date (English)", value: "Jun 2023", type: "English" },
-              { id: "aml-nature-en", label: "Project nature (English)", value: "Biomedical research project", type: "English" },
-              { id: "aml-duty-en", label: "Responsibilities (English)", value: "As a group member, consulted background information about AML, conducted research and completed an experimental design. Learned aseptic practices and the use of biosafety cabinets.", type: "English", wide: true }
+              { id: "aml-title-cn", label: "题目（中文）", value: "", type: "中文", wide: true },
+              { id: "aml-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "aml-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "aml-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "aml-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "aml-title-en", label: "Title (English)", value: "", type: "English", wide: true },
+              { id: "aml-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "aml-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "aml-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "aml-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "official-media",
-            title: "The Orientation of Official Media under the Conflict between Mainstream Culture and Subculture on New Media Platforms",
+            title: "",
             category: "调研项目 / Research project",
             fields: [
-              { id: "official-title-cn", label: "题目（中文）", value: "主流文化与亚文化冲突下新媒体平台官方媒体的定位", type: "中文", wide: true },
-              { id: "official-start-cn", label: "开始时间（中文）", value: "2021 年 7 月", type: "中文" },
-              { id: "official-end-cn", label: "结束时间（中文）", value: "2021 年 8 月", type: "中文" },
-              { id: "official-nature-cn", label: "项目性质（中文）", value: "新媒体传播调研项目", type: "中文" },
-              { id: "official-duty-cn", label: "职责（中文）", value: "担任小组组长，确定以 Bilibili 动画为抽样平台，按视频风格和类型等属性对官方媒体账号进行分类；设计并分析评论、弹幕、点赞、收藏等指标的调研方案，归纳官方媒体面向亚文化时的传播要点并完成报告。", type: "中文", wide: true },
-              { id: "official-title-en", label: "Title (English)", value: "The Orientation of Official Media under the Conflict between Mainstream Culture and Subculture on New Media Platforms", type: "English", wide: true },
-              { id: "official-start-en", label: "Start date (English)", value: "Jul 2021", type: "English" },
-              { id: "official-end-en", label: "End date (English)", value: "Aug 2021", type: "English" },
-              { id: "official-nature-en", label: "Project nature (English)", value: "New-media communication research project", type: "English" },
-              { id: "official-duty-en", label: "Responsibilities (English)", value: "As group leader, selected Bilibili animation as the sampling platform, categorized official media accounts by video attributes, and designed a survey across comments, bullet comments, likes and favorites. Summarized how official media could engage with subculture and wrote the final survey report.", type: "English", wide: true }
+              { id: "official-title-cn", label: "题目（中文）", value: "", type: "中文", wide: true },
+              { id: "official-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "official-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "official-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "official-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "official-title-en", label: "Title (English)", value: "", type: "English", wide: true },
+              { id: "official-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "official-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "official-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "official-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "uveal-melanoma",
-            title: "Hackers in the Eyes – Uveal Melanoma",
+            title: "",
             category: "科普项目 / Science communication",
             fields: [
-              { id: "uveal-title-cn", label: "题目（中文）", value: "Hackers in the Eyes——葡萄膜黑色素瘤", type: "中文" },
-              { id: "uveal-start-cn", label: "开始时间（中文）", value: "2022 年 6 月", type: "中文" },
-              { id: "uveal-end-cn", label: "结束时间（中文）", value: "2023 年 1 月", type: "中文" },
-              { id: "uveal-nature-cn", label: "项目性质（中文）", value: "医学科普与内容创作项目", type: "中文" },
-              { id: "uveal-duty-cn", label: "职责（中文）", value: "作为小组成员搭建并运营科普网站，绘制和推送葡萄膜黑色素瘤科普漫画，制作科普视频。", type: "中文", wide: true },
-              { id: "uveal-title-en", label: "Title (English)", value: "Hackers in the Eyes – Uveal Melanoma", type: "English" },
-              { id: "uveal-start-en", label: "Start date (English)", value: "Jun 2022", type: "English" },
-              { id: "uveal-end-en", label: "End date (English)", value: "Jan 2023", type: "English" },
-              { id: "uveal-nature-en", label: "Project nature (English)", value: "Medical science communication and content-creation project", type: "English" },
-              { id: "uveal-duty-en", label: "Responsibilities (English)", value: "As a group member, set up and operated a public website, created and published science-popularization cartoons about uveal melanoma, and produced educational videos.", type: "English", wide: true }
+              { id: "uveal-title-cn", label: "题目（中文）", value: "", type: "中文" },
+              { id: "uveal-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "uveal-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "uveal-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "uveal-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "uveal-title-en", label: "Title (English)", value: "", type: "English" },
+              { id: "uveal-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "uveal-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "uveal-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "uveal-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "allergen-analysis",
-            title: "Analysis of Serum Allergen Spectrums in Patients with Respiratory Disease in Shanghai",
+            title: "",
             category: "数据分析项目 / Data analysis",
             fields: [
-              { id: "allergen-title-cn", label: "题目（中文）", value: "上海市呼吸系统疾病患者血清过敏原谱分析", type: "中文", wide: true },
-              { id: "allergen-start-cn", label: "开始时间（中文）", value: "2022 年 8 月", type: "中文" },
-              { id: "allergen-end-cn", label: "结束时间（中文）", value: "2023 年 4 月", type: "中文" },
-              { id: "allergen-nature-cn", label: "项目性质（中文）", value: "临床样本统计分析项目", type: "中文" },
-              { id: "allergen-duty-cn", label: "职责（中文）", value: "使用 SPSS、Numbers 等统计软件，分析上海市第一人民医院两院区 2019 年 1 月至 2022 年 8 月 5,183 份呼吸系统疾病患者血清样本；按年龄、性别、月份和年份等维度分析多类过敏原，归纳分布规律并讨论可能原因。", type: "中文", wide: true },
-              { id: "allergen-title-en", label: "Title (English)", value: "Analysis of Serum Allergen Spectrums in Patients with Respiratory Disease in Shanghai", type: "English", wide: true },
-              { id: "allergen-start-en", label: "Start date (English)", value: "Aug 2022", type: "English" },
-              { id: "allergen-end-en", label: "End date (English)", value: "Apr 2023", type: "English" },
-              { id: "allergen-nature-en", label: "Project nature (English)", value: "Clinical sample statistical analysis project", type: "English" },
-              { id: "allergen-duty-en", label: "Responsibilities (English)", value: "Used SPSS, Numbers and other statistical software to analyze 5,183 serum samples from respiratory patients at two campuses of Shanghai General Hospital, collected from January 2019 to August 2022. Analyzed multiple allergen categories by age, gender, month and year, summarized distribution patterns and discussed possible explanations.", type: "English", wide: true }
+              { id: "allergen-title-cn", label: "题目（中文）", value: "", type: "中文", wide: true },
+              { id: "allergen-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "allergen-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "allergen-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "allergen-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "allergen-title-en", label: "Title (English)", value: "", type: "English", wide: true },
+              { id: "allergen-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "allergen-end-en", label: "End date (English)", value: "", type: "English" },
+              { id: "allergen-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "allergen-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "lungwise",
-            title: "LungWise",
+            title: "",
             category: "医疗创新项目 / Healthcare innovation",
             fields: [
-              { id: "lungwise-title-cn", label: "题目（中文）", value: "LungWise", type: "中文" },
+              { id: "lungwise-title-cn", label: "题目（中文）", value: "", type: "中文" },
               { id: "lungwise-start-cn", label: "开始时间（中文）", value: "", placeholder: "待填写", type: "中文" },
               { id: "lungwise-end-cn", label: "结束时间（中文）", value: "", placeholder: "待填写", type: "中文" },
-              { id: "lungwise-nature-cn", label: "项目性质（中文）", value: "医疗健康创新 / 医院体检场景概念项目", type: "中文" },
-              { id: "lungwise-duty-cn", label: "职责（中文）", value: "面向医院体检场景设计肺癌早期发现概念，围绕“优先关注谁、传达什么信息、下一步在哪里发生”拆解问题，提出风险分层、定向健康教育和医院平台交付的组合方案。明确模型用于人群管理和分诊支持，不替代国家筛查标准或临床判断，并关注数据、解释、人工复核和患者沟通。", type: "中文", wide: true },
-              { id: "lungwise-title-en", label: "Title (English)", value: "LungWise", type: "English" },
+              { id: "lungwise-nature-cn", label: "项目性质（中文）", value: "", type: "中文" },
+              { id: "lungwise-duty-cn", label: "职责（中文）", value: "", type: "中文", wide: true },
+              { id: "lungwise-title-en", label: "Title (English)", value: "", type: "English" },
               { id: "lungwise-start-en", label: "Start date (English)", value: "", placeholder: "待填写", type: "English" },
               { id: "lungwise-end-en", label: "End date (English)", value: "", placeholder: "待填写", type: "English" },
-              { id: "lungwise-nature-en", label: "Project nature (English)", value: "Healthcare innovation concept for hospital check-up settings", type: "English" },
-              { id: "lungwise-duty-en", label: "Responsibilities (English)", value: "Designed a lung-cancer early-detection concept for hospital check-up settings. Decomposed the problem into whom to prioritize, what information to provide and where the next care step should happen, then connected risk stratification, targeted health education and delivery through a hospital platform. Kept the model within a clear safety boundary: supporting population management and triage, not replacing formal screening eligibility or clinical judgment.", type: "English", wide: true }
+              { id: "lungwise-nature-en", label: "Project nature (English)", value: "", type: "English" },
+              { id: "lungwise-duty-en", label: "Responsibilities (English)", value: "", type: "English", wide: true }
             ]
           }
         ]
@@ -1056,17 +1056,17 @@
         title: "技能与个人优势",
         note: "可以按岗位要求删减或重排",
         fields: [
-          { id: "skills-tech", label: "技术技能", value: "Python｜C｜PyTorch｜SPSS｜Numbers｜数据分析｜深度学习", type: "技能" },
-          { id: "skills-domain", label: "医疗健康领域", value: "医学检验｜临床实验室流程｜CAR-T 细胞生产与检测｜实验室信息化与安全管理｜MHC-II / CD4+ T 细胞表位预测", type: "技能" },
-          { id: "skills-software", label: "软件技能", value: "Microsoft Office｜Adobe Photoshop｜Adobe Audition｜Adobe Lightroom｜Adobe Premiere｜Final Cut Pro｜Affinity Photo｜Procreate｜Procreate Dreams｜Zotero", type: "技能", wide: true },
-          { id: "skills-language", label: "语言能力", value: "IELTS 6.5｜CET-6 593｜LAJ 4（约日语 N3 水平）", type: "技能" },
-          { id: "skills-programming", label: "编程语言", value: "Python，C", type: "技能" },
-          { id: "skills-ai-tools", label: "人工智能工具", value: "使用 Cursor 等 AI 工具辅助项目框架整理，并按各任务目标进行目标驱动的 Vibe coding", type: "技能", wide: true },
-          { id: "skills-training", label: "培训证书", value: "2023 年度上海儿童医学中心药物和医疗器械临床试验质量管理培训（GCP 培训）", type: "技能", wide: true },
-          { id: "skills-hobbies", label: "兴趣爱好", value: "绘画｜动画制作｜歌唱｜音频编辑｜视频制作｜摄影", type: "技能" },
-          { id: "strengths-cn", label: "个人优势（中文）", value: "我能够连接临床流程、生物制药生产、生物医学分析和清晰的利益相关方沟通。我的优势包括医疗健康领域理解、分析严谨性、结构化拆解复杂问题、流程与质量意识，以及关注患者和实际落地。", type: "自我评价", wide: true },
-          { id: "strengths-en", label: "Personal strengths (English)", value: "A healthcare-trained, data-oriented problem solver who can bridge clinical workflows, biomanufacturing, biomedical analytics and clear stakeholder communication. Strong in analytical rigor, structured problem solving, process quality and translating technical work into real-world action.", type: "自我评价", wide: true },
-          { id: "leadership", label: "组织与领导经历", value: "在上海交通大学医学院团委组织部宣传中心从干事成长为主任，负责公众号运营和宣传中心日常工作，包括任务分配、优先级管理、质量审核和成员协调。", type: "其他经历", wide: true }
+          { id: "skills-tech", label: "技术技能", value: "", type: "技能" },
+          { id: "skills-domain", label: "医疗健康领域", value: "", type: "技能" },
+          { id: "skills-software", label: "软件技能", value: "", type: "技能", wide: true },
+          { id: "skills-language", label: "语言能力", value: "", type: "技能" },
+          { id: "skills-programming", label: "编程语言", value: "", type: "技能" },
+          { id: "skills-ai-tools", label: "人工智能工具", value: "", type: "技能", wide: true },
+          { id: "skills-training", label: "培训证书", value: "", type: "技能", wide: true },
+          { id: "skills-hobbies", label: "兴趣爱好", value: "", type: "技能" },
+          { id: "strengths-cn", label: "个人优势（中文）", value: "", type: "自我评价", wide: true },
+          { id: "strengths-en", label: "Personal strengths (English)", value: "", type: "自我评价", wide: true },
+          { id: "leadership", label: "组织与领导经历", value: "", type: "其他经历", wide: true }
         ]
       },
       {
@@ -1077,48 +1077,48 @@
         modules: [
           {
             id: "idea-honor",
-            title: "AstraZeneca Project iDEA 2026",
+            title: "",
             category: "竞赛入围 / Shortlisted",
             fields: [
-              { id: "honor-idea-cn", label: "荣誉名称（中文）", value: "入围新加坡全国总决赛", type: "中文" },
-              { id: "honor-idea-en", label: "Award / recognition (English)", value: "Shortlisted for the Singapore national final", type: "English" },
-              { id: "honor-idea-detail", label: "荣誉说明", value: "LungWise 项目面向医院体检场景设计肺癌早期发现概念，将风险分层、定向健康教育和医院平台交付连接起来。", type: "中文", wide: true }
+              { id: "honor-idea-cn", label: "荣誉名称（中文）", value: "", type: "中文" },
+              { id: "honor-idea-en", label: "Award / recognition (English)", value: "", type: "English" },
+              { id: "honor-idea-detail", label: "荣誉说明", value: "", type: "中文", wide: true }
             ]
           },
           {
             id: "microbiology-award",
-            title: "第七届基础技能操作竞赛",
+            title: "",
             category: "竞赛奖项 / Competition award",
             fields: [
-              { id: "honor-microbiology", label: "荣誉名称（中文）", value: "上海交通大学医学院检验系微生物学个人项目操作竞赛一等奖｜2021 年 5 月", type: "中文", wide: true },
-              { id: "honor-microbiology-en", label: "Award / recognition (English)", value: "Winning Prize of Microbiologic Experiments in Individual Events of the 7th Basic Skills Operation Competition, Laboratory Department, School of Medicine, Shanghai Jiao Tong University｜May 2021", type: "English", wide: true }
+              { id: "honor-microbiology", label: "荣誉名称（中文）", value: "", type: "中文", wide: true },
+              { id: "honor-microbiology-en", label: "Award / recognition (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "excellent-evaluation",
-            title: "2021 学年秋季学期优秀评价",
+            title: "",
             category: "校内认可 / Academic recognition",
             fields: [
-              { id: "honor-evaluation", label: "荣誉名称（中文）", value: "上海交通大学医学院团委组织部 2021 学年秋季学期优秀评价｜2022 年 2 月", type: "中文", wide: true },
-              { id: "honor-evaluation-en", label: "Award / recognition (English)", value: "Excellent Evaluation for Autumn Semester, 2021 Academic Year, issued by the Organization Department of the Youth League Committee, School of Medicine, Shanghai Jiao Tong University｜Feb 2022", type: "English", wide: true }
+              { id: "honor-evaluation", label: "荣誉名称（中文）", value: "", type: "中文", wide: true },
+              { id: "honor-evaluation-en", label: "Award / recognition (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "youth-league-award",
-            title: "优秀共青团员",
+            title: "",
             category: "校级荣誉 / University recognition",
             fields: [
-              { id: "honor-youth-league", label: "荣誉名称（中文）", value: "2021–2022 学年度“优秀共青团员”｜上海交通大学共青团｜2022 年 5 月", type: "中文", wide: true },
-              { id: "honor-youth-league-en", label: "Award / recognition (English)", value: "2021–2022 Academic Year Outstanding Youth League Member, issued by the Communist Youth League of Shanghai Jiao Tong University｜May 2022", type: "English", wide: true }
+              { id: "honor-youth-league", label: "荣誉名称（中文）", value: "", type: "中文", wide: true },
+              { id: "honor-youth-league-en", label: "Award / recognition (English)", value: "", type: "English", wide: true }
             ]
           },
           {
             id: "outstanding-graduate",
-            title: "上海交通大学 2023 届优秀毕业生",
+            title: "",
             category: "毕业荣誉 / Graduate recognition",
             fields: [
-              { id: "honor-graduate", label: "荣誉名称（中文）", value: "上海交通大学 2023 届优秀毕业生｜2023 年 6 月", type: "中文", wide: true },
-              { id: "honor-graduate-en", label: "Award / recognition (English)", value: "2023 Session Outstanding Graduate of Shanghai Jiao Tong University｜Jun 2023", type: "English", wide: true }
+              { id: "honor-graduate", label: "荣誉名称（中文）", value: "", type: "中文", wide: true },
+              { id: "honor-graduate-en", label: "Award / recognition (English)", value: "", type: "English", wide: true }
             ]
           }
         ]
@@ -1131,28 +1131,28 @@
         modules: [
           {
             id: "acappella",
-            title: "上海交通大学 A-Cappella Club",
+            title: "",
             category: "社团活动 / Student club",
             fields: [
-              { id: "activity-acappella-cn", label: "活动内容（中文）", value: "担任宣传组成员，参与日常声乐训练、合唱排练和舞台演出；围绕视觉主题为社团及多社团演出进行平面设计，包括海报、喷绘、推送和票券等。", type: "中文", wide: true },
-              { id: "activity-acappella-start-cn", label: "开始时间（中文）", value: "2019 年 9 月", type: "中文" },
-              { id: "activity-acappella-end-cn", label: "结束时间（中文）", value: "2022 年 7 月", type: "中文" },
-              { id: "activity-acappella-en", label: "Activity details (English)", value: "Member of the Propaganda Group. Conducted daily vocal training, singing rehearsals and stage performances; created graphic designs based on visual themes for club-specific and multi-club performances, including posters, spray paint, social-media posts and tickets.", type: "English", wide: true },
-              { id: "activity-acappella-start-en", label: "Start date (English)", value: "Sep 2019", type: "English" },
-              { id: "activity-acappella-end-en", label: "End date (English)", value: "Jul 2022", type: "English" }
+              { id: "activity-acappella-cn", label: "活动内容（中文）", value: "", type: "中文", wide: true },
+              { id: "activity-acappella-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "activity-acappella-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "activity-acappella-en", label: "Activity details (English)", value: "", type: "English", wide: true },
+              { id: "activity-acappella-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "activity-acappella-end-en", label: "End date (English)", value: "", type: "English" }
             ]
           },
           {
             id: "media-center",
-            title: "Media Center, Organization Department of the University’s Youth League Committee",
+            title: "",
             category: "学生组织 / Student organization",
             fields: [
-              { id: "activity-media-cn", label: "活动内容（中文）", value: "在上海交通大学医学院团委组织部宣传中心从干事成长为主任，负责公众号运营和宣传中心日常工作，包括任务分配、优先级管理、质量审核和成员协调。", type: "中文", wide: true },
-              { id: "activity-media-start-cn", label: "开始时间（中文）", value: "2020 年 1 月", type: "中文" },
-              { id: "activity-media-end-cn", label: "结束时间（中文）", value: "2022 年 1 月", type: "中文" },
-              { id: "activity-media-en", label: "Activity details (English)", value: "Executive Secretary (Jan 2020 – Mar 2021) and Director (Mar 2021 – Jan 2022). Involved in promotion, editing, photography, poster production and creative design for Great Youth Learning across the medical schools; managed the day-to-day work of the Publicity Center.", type: "English", wide: true },
-              { id: "activity-media-start-en", label: "Start date (English)", value: "Jan 2020", type: "English" },
-              { id: "activity-media-end-en", label: "End date (English)", value: "Jan 2022", type: "English" }
+              { id: "activity-media-cn", label: "活动内容（中文）", value: "", type: "中文", wide: true },
+              { id: "activity-media-start-cn", label: "开始时间（中文）", value: "", type: "中文" },
+              { id: "activity-media-end-cn", label: "结束时间（中文）", value: "", type: "中文" },
+              { id: "activity-media-en", label: "Activity details (English)", value: "", type: "English", wide: true },
+              { id: "activity-media-start-en", label: "Start date (English)", value: "", type: "English" },
+              { id: "activity-media-end-en", label: "End date (English)", value: "", type: "English" }
             ]
           }
         ]
@@ -1163,10 +1163,10 @@
         title: "申请辅助回答",
         note: "常见网申开放题，可按公司和岗位定制",
         fields: [
-          { id: "intro-cn", label: "自我介绍（中文，约 90 秒）", value: "您好，我叫董亦哲。本科就读于上海交通大学医学院医学检验技术专业，目前在新加坡国立大学攻读生物医学信息学硕士，预计 2026 年 12 月毕业。我的经历主要围绕医疗健康、实验流程和数据分析展开：我有临床检验和 CAR-T 生产检测经历，也独立复现过 MHC-II/CD4 表位预测深度学习框架，并参与了将风险分层、患者教育和医院平台连接起来的 LungWise 项目。我希望把临床场景理解、数据分析和实际落地能力用于解决医疗健康客户的问题。", type: "自我介绍", wide: true },
-          { id: "intro-en", label: "Self-introduction (English)", value: "Hello, my name is Yizhe Dong. I studied Medical Laboratory Science at Shanghai Jiao Tong University School of Medicine and am currently pursuing an MSc in Biomedical Informatics at the National University of Singapore, with expected graduation in December 2026. My experience sits at the intersection of healthcare, laboratory operations and data analytics, spanning clinical laboratory work, CAR-T manufacturing and deep-learning research. I hope to bring together clinical understanding, analytical rigor and stakeholder communication to solve healthcare and life-sciences problems.", type: "自我介绍", wide: true },
-          { id: "why-consulting", label: "Why consulting?（English）", value: "I want to expand from solving problems within an individual experiment or production workflow to solving broader problems that affect patients, healthcare organizations and life-sciences companies. Consulting appeals to me because it combines industry understanding, evidence-based analysis, structured problem solving and implementation. My healthcare background and analytical training give me a strong foundation, while consulting would help me further develop commercial judgment and client communication.", type: "申请回答", wide: true },
-          { id: "ai-tools", label: "How do you use AI tools?（English）", value: "I use AI tools as productivity aids, not as substitutes for judgment. I define the problem myself, review the logic, validate outputs, read relevant literature and keep the process reviewable. In healthcare projects, I pay particular attention to privacy, model boundaries, interpretability and human review. AI can shorten the path from an idea to a prototype, but responsibility, validation and final judgment must remain with people.", type: "申请回答", wide: true }
+          { id: "intro-cn", label: "自我介绍（中文，约 90 秒）", value: "", type: "自我介绍", wide: true },
+          { id: "intro-en", label: "Self-introduction (English)", value: "", type: "自我介绍", wide: true },
+          { id: "why-consulting", label: "Why consulting?（English）", value: "", type: "申请回答", wide: true },
+          { id: "ai-tools", label: "How do you use AI tools?（English）", value: "", type: "申请回答", wide: true }
         ]
       }
     ];
@@ -1199,249 +1199,7 @@
           field.placeholder = field.placeholder || "待填写";
         });
       });
-      applyLatestResumeData(sections);
       return sections;
-    }
-
-    function applyLatestResumeData(sections) {
-      const findSection = id => sections.find(section => section.id === id);
-      const findModule = (sectionId, moduleId) => (findSection(sectionId)?.modules || []).find(module => module.id === moduleId);
-      const setField = (sectionId, fieldId, value) => {
-        const section = findSection(sectionId);
-        const field = [
-          ...(section?.fields || []),
-          ...(section?.modules || []).flatMap(module => module.fields || [])
-        ].find(item => item.id === fieldId);
-        if (field) field.value = value;
-      };
-      const setTitle = (sectionId, moduleId, titleCn, titleEn) => {
-        const module = findModule(sectionId, moduleId);
-        if (!module) return;
-        module.titleCn = titleCn;
-        module.titleEn = titleEn;
-      };
-      const setFields = (sectionId, values) => Object.entries(values).forEach(([id, value]) => setField(sectionId, id, value));
-
-      setFields("personal", {
-        "name-cn": "董亦哲",
-        "name-en": "Dong Yizhe",
-        dob: "2001 年 5 月 24 日",
-        gender: "女",
-        phone: "(+65) 80385946",
-        "backup-phone": "(+86) 13701854112",
-        email: "abby.dyz@qq.com",
-        location: "Singapore / 新加坡",
-        "target-role": ""
-      });
-
-      setTitle("education", "nus-education", "新加坡国立大学", "National University of Singapore");
-      setFields("education", {
-        "edu-nus-school": "新加坡国立大学",
-        "edu-nus-college": "杨潞龄医学院",
-        "edu-nus-major": "生物医学信息学理学硕士",
-        "edu-nus-start": "2025 年 8 月",
-        "edu-nus-end": "2026 年 12 月（预期毕业）",
-        "edu-nus-gpa": "3.63 / 5.0",
-        "edu-nus-courses": "生物医学信息学；医学数据与数据处理；软件开发（Python）；数据结构与算法；人工智能；数据分析基础",
-        "edu-nus-school-en": "National University of Singapore",
-        "edu-nus-college-en": "Yong Loo Lin School of Medicine",
-        "edu-nus-major-en": "Master of Science in Biomedical Informatics",
-        "edu-nus-start-en": "Aug 2025",
-        "edu-nus-end-en": "Dec 2026 (Expected Graduation)",
-        "edu-nus-gpa-en": "3.63 / 5.0",
-        "edu-nus-courses-en": "Biomedical Informatics; Medical Data and Data Processing; Software Development (Python); Data Structures and Algorithms; Artificial Intelligence; Fundamentals of Data Analytics"
-      });
-      setTitle("education", "sjtu-education", "上海交通大学", "Shanghai Jiao Tong University");
-      setFields("education", {
-        "edu-sjtu-school": "上海交通大学",
-        "edu-sjtu-college": "医学院",
-        "edu-sjtu-major": "医学检验技术理学学士",
-        "edu-sjtu-start": "2019 年 9 月",
-        "edu-sjtu-end": "2023 年 6 月",
-        "edu-sjtu-gpa": "3.44 / 4.3",
-        "edu-sjtu-courses": "卫生统计学；临床免疫学；分子生物学；程序设计基础（C）；临床生物化学；实验室管理",
-        "edu-sjtu-school-en": "Shanghai Jiao Tong University",
-        "edu-sjtu-college-en": "School of Medicine",
-        "edu-sjtu-major-en": "Bachelor of Science in Medical Laboratory Science",
-        "edu-sjtu-start-en": "Sep 2019",
-        "edu-sjtu-end-en": "Jun 2023",
-        "edu-sjtu-gpa-en": "3.44 / 4.3",
-        "edu-sjtu-courses-en": "Health Statistics; Clinical Immunology; Molecular Biology; Programming Fundamentals (C); Clinical Biochemistry; Laboratory Management"
-      });
-
-      setTitle("experience", "spbio", "上海医药集团生物治疗技术有限公司", "Shanghai Pharmaceuticals Holding Bio-therapeutics Limited");
-      setFields("experience", {
-        "spbio-company-cn": "上海医药集团生物治疗技术有限公司",
-        "spbio-position-cn": "CMC 细胞 · 生产部",
-        "spbio-start-cn": "2023 年 7 月",
-        "spbio-end-cn": "2025 年 4 月",
-        "spbio-duty-cn": "参与 CAR-T 细胞生产与检测，包括 T 细胞分离培养、转染及效率检测；承担实验室信息化管理、实验室安全（信息、生物等）及其他相关工作。",
-        "spbio-company-en": "Shanghai Pharmaceuticals Holding Bio-therapeutics Limited",
-        "spbio-position-en": "CMC Cell · Production Department",
-        "spbio-start-en": "Jul 2023",
-        "spbio-end-en": "Apr 2025",
-        "spbio-duty-en": "Participated in CAR-T cell production and testing, including T-cell isolation and culture, transfection, and efficiency assessment. Carried out laboratory information management, laboratory safety (information, biological, etc.), and other related responsibilities."
-      });
-      setTitle("experience", "sgh", "上海市第一人民医院", "Shanghai General Hospital");
-      setFields("experience", {
-        "sgh-company-cn": "上海市第一人民医院",
-        "sgh-position-cn": "检验科实习生",
-        "sgh-start-cn": "2022 年 7 月",
-        "sgh-end-cn": "2022 年 12 月",
-        "sgh-duty-cn": "参与生化、免疫、质谱、流式、分子诊断、门急诊、血液、输血等多科室临床检验工作；为患者采血并解读报告，通过自动化仪器或手工操作处理检验样本，参与仪器日常维护及实验室管理。",
-        "sgh-company-en": "Shanghai General Hospital",
-        "sgh-position-en": "Intern of Laboratory Department",
-        "sgh-start-en": "Jul 2022",
-        "sgh-end-en": "Dec 2022",
-        "sgh-duty-en": "Participated in clinical laboratory work across biochemistry, immunology, mass spectrometry, flow cytometry, molecular diagnostics, outpatient and emergency, hematology, and transfusion. Collected blood samples and interpreted reports; processed test samples via automated instruments or manual procedures; participated in routine instrument maintenance and laboratory management."
-      });
-      setTitle("experience", "ruijin", "上海交通大学医学院附属瑞金医院", "Ruijin Hospital, Shanghai Jiao Tong University School of Medicine");
-      setFields("experience", {
-        "ruijin-company-cn": "上海交通大学医学院附属瑞金医院",
-        "ruijin-position-cn": "党委宣传处挂职锻炼",
-        "ruijin-start-cn": "2021 年 8 月",
-        "ruijin-end-cn": "2021 年 8 月",
-        "ruijin-duty-cn": "为医院官方公众号设计图文海报、科普漫画及插画素材；制作科普推文、整理文案，开展文化学习与政治宣传工作。",
-        "ruijin-company-en": "Ruijin Hospital, Shanghai Jiao Tong University School of Medicine",
-        "ruijin-position-en": "Staff of Party Committee's Propaganda Office (Temporary Workouts)",
-        "ruijin-start-en": "Aug 2021",
-        "ruijin-end-en": "Aug 2021",
-        "ruijin-duty-en": "Designed graphic posters, science-popularization comics, and illustration assets for the hospital's official WeChat account. Produced science-popularization posts, organized texts, and carried out cultural learning and political advocacy work."
-      });
-
-      const projects = findSection("projects");
-      if (projects) {
-        const projectOrder = ["lungwise", "immuscope", "allergen-analysis", "uveal-melanoma", "official-media", "aml-msc"];
-        const projectMap = new Map(projects.modules.filter(module => module.id !== "traffic-diversion").map(module => [module.id, module]));
-        projects.modules = projectOrder.map(id => projectMap.get(id)).filter(Boolean);
-      }
-      setTitle("projects", "lungwise", "LungWise——从新加坡起步的肺癌早筛", "LungWise - Earlier Lung-Cancer Detection Starting in Singapore");
-      setFields("projects", {
-        "lungwise-start-cn": "2026 年 7 月",
-        "lungwise-end-cn": "2026 年 8 月",
-        "lungwise-nature-cn": "入围阿斯利康 Project iDEA 2026 新加坡全国总决赛",
-        "lungwise-duty-cn": "针对医院体检场景提出肺癌早筛方案：风险分层 + 定向健康教育 + 依托医院平台落地，将“优先关注谁、沟通什么、在何处就诊”串联起来；主张以分类风险模型识别较高风险个体以辅助分诊，同时将模型与国家筛查纳入标准分开，使其服务于人群管理而非替代临床标准；使用 Cursor 辅助开发，在明确的临床安全约束下，将领域需求转化为可审阅、可运行的研究原型。",
-        "lungwise-start-en": "Jul 2026",
-        "lungwise-end-en": "Aug 2026",
-        "lungwise-nature-en": "Shortlisted to AstraZeneca Project iDEA 2026 Singapore national final",
-        "lungwise-duty-en": "Proposed a lung-cancer early-detection concept for hospital check-up settings: risk stratification, targeted health education, and delivery on the hospital platform, linking who to prioritize, what to communicate, and where care happens. Advocated a classification risk model to identify higher-risk individuals for triage while keeping it separate from national screening eligibility. Practiced Cursor to assist development and turn domain requirements into a reviewable, runnable research prototype under explicit clinical safety constraints."
-      });
-      setTitle("projects", "immuscope", "ImmuScope复现与实验探索", "Reproduction and Experimental Exploration on ImmuScope");
-      setFields("projects", {
-        "immuscope-title-cn": "ImmuScope复现与实验探索",
-        "immuscope-nature-cn": "生物医学信息学硕士毕业设计",
-        "immuscope-duty-cn": "独立复现并扩展 ImmuScope，一种用于 MHC-II 抗原呈递及 CD4+ T 细胞表位预测的弱监督深度学习框架；使用 PyTorch 对 EL→CD4→免疫原性预测流程进行对齐复现，通过对照消融实验评估自迭代 MIL、微调阶段及度量学习目标对性能的贡献；在共享 CD4 测试集（779,135 个样本）上将 ImmuScope 与 NetMHCIIpan-4.3 和 MixMHC2pred-2.0 进行基准对比，采用配对 Bootstrap 推断及 Holm 校正 Wilcoxon 检验评估统计学显著性；开展划分敏感性分析，并整合 IEDB 中整理的结核分枝杆菌 CD4+ T 细胞表位数据进行探索性免疫原性数据扩展，在汇总 AUC 和 AUPR 上取得概念验证层面的提升；使用 Cursor 辅助论文框架整理并根据目标生成代码。",
-        "immuscope-title-en": "Reproduction and Experimental Exploration on ImmuScope",
-        "immuscope-nature-en": "Capstone Project for MSc in Biomedical Informatics",
-        "immuscope-duty-en": "Independently reproduced and extended ImmuScope, a weakly supervised deep-learning framework for MHC-II antigen presentation and CD4+ T-cell epitope prediction. Conducted paper-aligned reproduction of the EL-to-CD4-to-immunogenicity pipeline using PyTorch; performed controlled ablation experiments; benchmarked against NetMHCIIpan-4.3 and MixMHC2pred-2.0 on a shared CD4 test set of 779,135 samples; applied paired bootstrap inference and Holm-corrected Wilcoxon tests; conducted split-sensitivity analysis and an exploratory IEDB Mycobacterium tuberculosis epitope-data extension. Used Cursor to assist with paper structure organization and goal-driven code generation."
-      });
-      setFields("projects", {
-        "allergen-title-cn": "上海地区呼吸系统疾病患者过敏原谱状况分析",
-        "allergen-nature-cn": "医学检验技术学士学位论文",
-        "allergen-title-en": "Analysis of Serum Allergen Spectrums in Patients with Respiratory Disease in Shanghai",
-        "allergen-nature-en": "Graduation Thesis for BSc in Medical Laboratory Science",
-        "uveal-title-cn": "眼睛里的“黑客”——葡萄膜黑色素瘤",
-        "uveal-nature-cn": "医学科普与内容创作项目",
-        "uveal-title-en": "Hackers in the Eyes — Uveal Melanoma",
-        "official-title-cn": "在新媒体平台上主流文化和亚文化的冲突下官媒的定位",
-        "official-nature-cn": "新媒体传播调研项目",
-        "official-title-en": "The Orientation of Official Media under the Conflict between Mainstream Culture and Subculture on New Media Platforms",
-        "aml-nature-cn": "生物医学科研项目",
-        "aml-nature-en": "Biomedical research project"
-      });
-      setTitle("projects", "allergen-analysis", "上海地区呼吸系统疾病患者过敏原谱状况分析", "Analysis of Serum Allergen Spectrums in Patients with Respiratory Disease in Shanghai");
-      setTitle("projects", "uveal-melanoma", "眼睛里的“黑客”——葡萄膜黑色素瘤", "Hackers in the Eyes — Uveal Melanoma");
-      setTitle("projects", "official-media", "在新媒体平台上主流文化和亚文化的冲突下官媒的定位", "The Orientation of Official Media under the Conflict between Mainstream Culture and Subculture on New Media Platforms");
-      setTitle("projects", "aml-msc", "AML来源的MSC细胞在AML发生发展中的作用与分子机制", "Role and Molecular Mechanisms of AML-Derived MSC Cells in Development of AML");
-
-      setFields("skills", {
-        "skills-tech": "Python｜C｜PyTorch｜SPSS｜Numbers｜数据分析｜深度学习",
-        "skills-domain": "医学检验｜临床实验室流程｜CAR-T 细胞生产与检测｜实验室信息化与安全管理｜MHC-II / CD4+ T 细胞表位预测",
-        "skills-software": "Microsoft Office｜Adobe Photoshop｜Adobe Audition｜Adobe Lightroom｜Adobe Premiere｜Final Cut Pro｜Affinity Photo｜Procreate｜Procreate Dreams｜Zotero",
-        "skills-language": "IELTS 6.5｜CET-6 593｜LAJ 4（约日语 N3 水平）",
-        "skills-programming": "Python，C",
-        "skills-ai-tools": "使用 Cursor 等 AI 工具辅助项目框架整理，并按各任务目标进行目标驱动的 Vibe coding",
-        "skills-training": "2023 年度上海儿童医学中心药物和医疗器械临床试验质量管理培训（GCP 培训）",
-        "skills-hobbies": "绘画｜动画制作｜歌唱｜音频编辑｜视频制作｜摄影",
-        "strengths-cn": "我的经历连接临床问题、实验流程与生物医学数据方法，具备较强的流程、安全、细节与质量意识，并习惯在学习和工作任务中应用 PDCA。我能够在跨文化团队中协作，并将技术工作转化为清晰、可执行的沟通内容。",
-        "strengths-en": "My interdisciplinary path connects clinical questions, experimental workflows and biomedical data methods. I bring strong process, safety, detail and quality awareness, a PDCA mindset, and the ability to translate technical work into clear, actionable communication across cultures."
-      });
-      setFields("answers", {
-        "intro-cn": "您好，我叫董亦哲。本科毕业于上海交通大学医学院医学检验技术专业，目前在新加坡国立大学攻读生物医学信息学硕士，预计 2026 年 12 月毕业。我的经历从临床检验、CAR-T 细胞生产与检测，逐步延伸到生物医学数据和计算方法，包括对 MHC-II / CD4 表位预测框架的复现与实验探索。我重视流程、安全、细节与质量，能够连接临床问题、实验流程和数据方法，并习惯在学习和工作中应用 PDCA。",
-        "intro-en": "Hello, my name is Dong Yizhe. I graduated in Medical Laboratory Science from Shanghai Jiao Tong University School of Medicine and am currently pursuing an MSc in Biomedical Informatics at the National University of Singapore, with expected graduation in December 2026. My experience has progressed from clinical laboratory work and CAR-T cell production and testing to biomedical data and computational methods, including reproducing and experimentally exploring an MHC-II / CD4 epitope prediction framework. I bring strong process, safety, detail and quality awareness, the ability to bridge clinical questions, experimental workflows and data methods, and a PDCA mindset."
-      });
-
-      const honors = findSection("honors");
-      if (honors) {
-        const honorOrder = ["outstanding-graduate", "youth-league-award", "microbiology-award"];
-        const honorMap = new Map(honors.modules.filter(module => honorOrder.includes(module.id)).map(module => [module.id, module]));
-        honors.modules = honorOrder.map(id => honorMap.get(id)).filter(Boolean);
-      }
-      setTitle("honors", "microbiology-award", "检验系第七届基本技能操作竞赛", "7th Basic Skills Operation Competition");
-      setTitle("honors", "youth-league-award", "优秀共青团员", "Outstanding Youth League Member");
-      setTitle("honors", "outstanding-graduate", "上海交通大学2023届优秀毕业生", "Outstanding Graduate of Shanghai Jiao Tong University, Class of 2023");
-      setFields("honors", {
-        "honor-microbiology": "上海交通大学医学院检验系第七届基本技能操作大赛个人赛——微生物实验优胜奖｜2021 年 5 月",
-        "honor-microbiology-en": "Winning Prize in Microbiology Experiments, Individual Competition, 7th Basic Skills Operation Competition, Department of Laboratory Medicine, Shanghai Jiao Tong University School of Medicine｜May 2021",
-        "honor-youth-league": "2021–2022 年度“优秀共青团员”称号｜2022 年 5 月",
-        "honor-youth-league-en": "2021–2022 Outstanding Youth League Member｜May 2022",
-        "honor-graduate": "2023 届上海交通大学优秀毕业生｜2023 年 6 月",
-        "honor-graduate-en": "Outstanding Graduate of Shanghai Jiao Tong University, Class of 2023｜Jun 2023"
-      });
-
-      setTitle("activities", "acappella", "SJTU阿卡贝拉合唱团", "SJTU A Cappella Club");
-      setTitle("activities", "media-center", "上海交通大学医学院团委组织部宣传中心", "Media Center, Organization Department of Youth League Committee of Shanghai Jiao Tong University School of Medicine");
-      setFields("activities", {
-        "activity-acappella-cn": "成员；开展日常声乐训练、合唱排练及舞台演出；为社团专场或多社团联合演出进行平面设计，包括视觉主题、海报、喷绘、推送和门票等。",
-        "activity-acappella-en": "Member. Conducted daily vocal training, choir rehearsals, and stage performances; created graphic designs including visual themes, posters, banners, social-media posts and tickets for club-specific or multi-club joint performances.",
-        "activity-media-cn": "干事（2020年1月–2021年3月）兼主任（2021年3月–2022年1月）；负责院系团委组织部公众号运营，参与《青年大学习》的宣传、编辑、摄影、海报制作及创意设计；负责宣传中心日常工作。",
-        "activity-media-en": "Executive Secretary (Jan 2020–Mar 2021) and Director (Mar 2021–Jan 2022). Managed the official WeChat account, contributing to promotion, editing, photography, poster design and creative work for Great Youth Learning; managed day-to-day operations of the Media Center."
-      });
-
-      const activities = findSection("activities");
-      if (activities && !activities.modules.some(module => module.id === "kangaroo-learning")) {
-        activities.modules.unshift({
-          id: "kangaroo-learning",
-          title: "Kangaroo Learning Center",
-          titleCn: "袋鼠学习中心有限公司（方田教育，新加坡）",
-          titleEn: "Kangaroo Learning Center Pte. Ltd. (Fangtian Education, Singapore)",
-          category: "教育工作 / Teaching",
-          fields: [
-            { id: "activity-kangaroo-position-cn", label: "职位（中文）", value: "助教｜兼职", type: "中文" },
-            { id: "activity-kangaroo-start-cn", label: "开始时间（中文）", value: "2026 年 7 月", type: "中文" },
-            { id: "activity-kangaroo-end-cn", label: "结束时间（中文）", value: "2026 年 12 月（预计）", type: "中文" },
-            { id: "activity-kangaroo-cn", label: "活动内容（中文）", value: "在小学数学双师课堂中协助主讲教师，负责课时材料、座位安排、课堂节奏及 3 小时课时中的突发问题；组织、批改并记录课前课后测验，跟踪学生进度与课堂表现；向家长群同步课堂动态，核对并分发课堂笔记与作业；与家长沟通学习进度，制作难点讲解视频与文字摘要；协调讲座和校园活动现场支持，并协助维护校园安全与课堂纪律。", type: "中文", wide: true },
-            { id: "activity-kangaroo-position-en", label: "Position (English)", value: "Teaching Assistant | Part-time", type: "English" },
-            { id: "activity-kangaroo-start-en", label: "Start date (English)", value: "Jul 2026", type: "English" },
-            { id: "activity-kangaroo-end-en", label: "End date (English)", value: "Dec 2026 (Expected)", type: "English" },
-            { id: "activity-kangaroo-en", label: "Activity details (English)", value: "Supported lead teachers in a dual-teacher primary mathematics classroom, managing materials, seating, classroom flow and unexpected issues across three-hour sessions. Administered, marked and recorded quizzes; tracked progress and behaviour; delivered class updates and lesson notes to parents; communicated learning progress; created explainer videos and written summaries; coordinated seminar and school-event logistics and supported campus safety and discipline.", type: "English", wide: true }
-          ]
-        });
-      }
-      if (activities && !activities.modules.some(module => module.id === "sunflower-center")) {
-        activities.modules.push({
-          id: "sunflower-center",
-          title: "上海太阳花社区儿童服务中心",
-          titleCn: "上海太阳花社区儿童服务中心",
-          titleEn: "Shanghai Sunflower Community Children's Service Center",
-          category: "志愿服务 / Volunteer work",
-          fields: [
-            { id: "activity-sunflower-position-cn", label: "职位（中文）", value: "读书会志愿者", type: "中文" },
-            { id: "activity-sunflower-start-cn", label: "开始时间（中文）", value: "2020 年秋季", type: "中文" },
-            { id: "activity-sunflower-end-cn", label: "结束时间（中文）", value: "2022 年春季", type: "中文" },
-            { id: "activity-sunflower-cn", label: "活动内容（中文）", value: "准备绘本阅读课程；辅助管理课堂纪律。", type: "中文", wide: true },
-            { id: "activity-sunflower-position-en", label: "Position (English)", value: "Reading Club Volunteer", type: "English" },
-            { id: "activity-sunflower-start-en", label: "Start date (English)", value: "Autumn 2020", type: "English" },
-            { id: "activity-sunflower-end-en", label: "End date (English)", value: "Spring 2022", type: "English" },
-            { id: "activity-sunflower-en", label: "Activity details (English)", value: "Prepared picture-book reading sessions and assisted with classroom discipline management.", type: "English", wide: true }
-          ]
-        });
-      }
-      if (activities) {
-        const activityOrder = ["kangaroo-learning", "media-center", "acappella", "sunflower-center"];
-        const activityMap = new Map(activities.modules.map(module => [module.id, module]));
-        activities.modules = activityOrder.map(id => activityMap.get(id)).filter(Boolean);
-      }
     }
 
     function migratePeriodFields(sectionsToMigrate) {
@@ -2384,11 +2142,11 @@
     });
 
     document.getElementById("reset").addEventListener("click", () => {
-      if (!window.confirm("确定恢复为初始内容吗？你当前编辑的内容会被清除。")) return;
+      if (!window.confirm("确定清空所有填写内容并恢复为空白模板吗？你当前编辑的内容会被清除。")) return;
       sections = cloneInitial();
       save();
       render();
-      showToast("已恢复初始内容");
+      showToast("已清空并初始化");
     });
 
     render();
